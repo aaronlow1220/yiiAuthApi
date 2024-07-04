@@ -18,7 +18,7 @@ class AuthController extends Controller
         $behaviors = parent::behaviors();
         $behaviors['authenticator'] = [
             'class' => HttpBearerAuth::className(),
-            'only' => ['index', 'user',],
+            'only' => ['index', 'user'],
         ];
         return $behaviors;
     }
@@ -125,11 +125,19 @@ class AuthController extends Controller
     {
 
         $loggedUser = users::find()->where(["access_token" => Yii::$app->request->post('access_token')])->one();
-        $loggedUser->access_token = null;
-        $loggedUser->update();
+        if ($loggedUser != null) {
+            $loggedUser->access_token = null;
+            $loggedUser->update();
+            $data = [
+                "success" => true,
+                "message" => "Logout successful",
+            ];
+        return $this->asJson($data);
+
+        }
         $data = [
-            "success" => true,
-            "message" => "Logout successful",
+            "success" => false,
+            "message" => "User not found",
         ];
         return $this->asJson($data);
     }
