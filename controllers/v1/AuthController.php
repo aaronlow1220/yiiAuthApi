@@ -100,11 +100,15 @@ class AuthController extends Controller
                 return $this->asJson($data);
             }
             if (password_verify($model->password, $loggedUser->password)) {
+                $newToken = users::generateAccessToken();
+                $loggedUser->access_token = $newToken;
+
                 $data = [
                     "success" => true,
                     "message" => "Login successful",
-                    "token" => $loggedUser->auth_key,
+                    "token" => $newToken,
                 ];
+
                 return $this->asJson($data);
             }
         }

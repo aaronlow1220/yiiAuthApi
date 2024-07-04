@@ -22,7 +22,11 @@ class users extends ActiveRecord implements IdentityInterface
 
     public static function findIdentityByAccessToken($token, $type = null)
     {
-        return static::findOne(['auth_key' => $token]);
+        return static::findOne(['access_token' => $token]);
+    }
+
+    public static function generateAccessToken(){
+        return Yii::$app->security->generateRandomString();
     }
 
     public function getId()
