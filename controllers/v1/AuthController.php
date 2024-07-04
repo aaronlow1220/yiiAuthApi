@@ -102,7 +102,7 @@ class AuthController extends Controller
             if (password_verify($model->password, $loggedUser->password)) {
                 $newToken = users::generateAccessToken();
                 $loggedUser->access_token = $newToken;
-
+                $loggedUser->update();
                 $data = [
                     "success" => true,
                     "message" => "Login successful",
