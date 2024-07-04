@@ -1,6 +1,7 @@
 <?php
 namespace app\models;
 
+use Yii;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
 
@@ -38,4 +39,23 @@ class users extends ActiveRecord implements IdentityInterface
     {
         return $this->getAuthKey() === $authKey;
     }
+
+    public function generateAccessToken()
+    {
+        $this->access_token = Yii::$app->security->generateRandomString();
+        return $this->access_token;
+    }
+
+    public function login()
+{
+    if ($this->validate()) {
+        $user = users::findOne(['email' => $this->email]);
+
+        if ($user && Yii::$app->getSecurity()->validatePassword($this->password, $user->password_hash)) {
+            return $user;
+        }
+    }
+
+    return null;
+}
 }

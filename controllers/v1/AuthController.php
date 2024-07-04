@@ -2,14 +2,26 @@
 
 namespace app\controllers\v1;
 
-use app\models\CRegisterForm;
 use Yii;
 use yii\web\Controller;
 use app\models\users;
+use yii\filters\auth\HttpBearerAuth;
+use app\models\CLoginForm;
+use app\models\CRegisterForm;
 
 class AuthController extends Controller
 {
     public $enableCsrfValidation = false;
+
+    public function behaviors(){
+        $behaviors = parent::behaviors();
+        $behaviors['authenticator'] = [
+            'class' => HttpBearerAuth::className(),
+            'only' => ['index', 'user', ],
+        ];
+        return $behaviors;
+    }
+
     public function actionIndex()
     {
         $loggedInUser = Yii::$app->user->identity;
@@ -59,6 +71,26 @@ class AuthController extends Controller
         $data = [
             "success" => false,
             "message" => "Register failed, please try again",
+        ];
+        return $this->asJson($data);
+    }
+
+    public function actionLogin(){
+        $model = new CLoginForm();
+
+        $model->attributes = Yii::$app->request->post('credentials');
+
+        if (!$model->validate()) {
+            $data = [
+                "success" => false,
+                "message" => "Invalid data provided",
+            ];
+            return $this->asJson($data);
+        }
+
+        $data = [
+            "success" => false,
+            "message" => "Login failed, please try again",
         ];
         return $this->asJson($data);
     }
