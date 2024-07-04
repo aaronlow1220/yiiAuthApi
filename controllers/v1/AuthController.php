@@ -121,6 +121,19 @@ class AuthController extends Controller
         return $this->asJson($data);
     }
 
+    public function actionLogout()
+    {
+
+        $loggedUser = users::find()->where(["access_token" => Yii::$app->request->post('access_token')])->one();
+        $loggedUser->access_token = null;
+        $loggedUser->update();
+        $data = [
+            "success" => true,
+            "message" => "Logout successful",
+        ];
+        return $this->asJson($data);
+    }
+
     public function actionUser()
     {
         $data = [
