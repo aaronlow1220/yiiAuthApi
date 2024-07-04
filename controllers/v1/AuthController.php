@@ -13,11 +13,12 @@ class AuthController extends Controller
 {
     public $enableCsrfValidation = false;
 
-    public function behaviors(){
+    public function behaviors()
+    {
         $behaviors = parent::behaviors();
         $behaviors['authenticator'] = [
             'class' => HttpBearerAuth::className(),
-            'only' => ['index', 'user', ],
+            'only' => ['index', 'user',],
         ];
         return $behaviors;
     }
@@ -75,7 +76,8 @@ class AuthController extends Controller
         return $this->asJson($data);
     }
 
-    public function actionLogin(){
+    public function actionLogin()
+    {
         $model = new CLoginForm();
 
         $model->attributes = Yii::$app->request->post('credentials');
@@ -87,6 +89,26 @@ class AuthController extends Controller
             ];
             return $this->asJson($data);
         }
+
+        if ($model->validate()) {
+            $loggedUser = users::find()->where(["email" => $model->email])->one();
+            if ($loggedUser == null) {
+                $data = [
+                    "success" => false,
+                    "message" => "User not found",
+                ];
+                return $this->asJson($data);
+            }
+            if (password_verify($model->password, $loggedUser->password)) {
+                $data = [
+                    "success" => true,
+                    "message" => "Login successful",
+                    "token" => $loggedUser->auth_key,
+                ];
+                return $this->asJson($data);
+            }
+        }
+        Yii::$app->response->statusCode = 400;
 
         $data = [
             "success" => false,

@@ -22,7 +22,7 @@ class users extends ActiveRecord implements IdentityInterface
 
     public static function findIdentityByAccessToken($token, $type = null)
     {
-        return static::findOne(['access_token' => $token]);
+        return static::findOne(['auth_key' => $token]);
     }
 
     public function getId()
@@ -32,7 +32,7 @@ class users extends ActiveRecord implements IdentityInterface
 
     public function getAuthKey()
     {
-        return $this->password;
+        return $this->auth_key;
     }
 
     public function validateAuthKey($authKey)
@@ -40,22 +40,16 @@ class users extends ActiveRecord implements IdentityInterface
         return $this->getAuthKey() === $authKey;
     }
 
-    public function generateAccessToken()
+    public function beforeSave($insert)
     {
-        $this->access_token = Yii::$app->security->generateRandomString();
-        return $this->access_token;
-    }
-
-    public function login()
-{
-    if ($this->validate()) {
-        $user = users::findOne(['email' => $this->email]);
-
-        if ($user && Yii::$app->getSecurity()->validatePassword($this->password, $user->password_hash)) {
-            return $user;
+        if (parent::beforeSave($insert)) {
+            if ($this->isNewRecord) {
+                $this->auth_key = Yii::$app->security->generateRandomString();
+            }
+            return true;
         }
+        return false;
     }
 
-    return null;
-}
+    
 }
