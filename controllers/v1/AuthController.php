@@ -37,8 +37,7 @@ class AuthController extends Controller
 
         if (!$model->validate()) {
             $data = [
-                "success" => false,
-                "message" => "Invalid data provided",
+                "error" => "Invalid data provided",
             ];
             return $this->asJson($data);
         }
@@ -48,8 +47,7 @@ class AuthController extends Controller
 
         if ($user != null) {
             $data = [
-                "success" => false,
-                "message" => "User already exists",
+                "error" => "User already exists",
             ];
             return $this->asJson($data);
         }
@@ -63,15 +61,13 @@ class AuthController extends Controller
 
         if ($userModel->save()) {
             $data = [
-                "success" => true,
-                "message" => "User registered successfully",
+                "id" => $userModel->uuid,
             ];
             return $this->asJson($data);
         }
 
         $data = [
-            "success" => false,
-            "message" => "Register failed, please try again",
+            "error" => "Register failed, please try again",
         ];
         return $this->asJson($data);
     }
@@ -132,12 +128,23 @@ class AuthController extends Controller
                 "success" => true,
                 "message" => "Logout successful",
             ];
-        return $this->asJson($data);
+            return $this->asJson($data);
 
         }
         $data = [
             "success" => false,
             "message" => "User not found",
+        ];
+        return $this->asJson($data);
+    }
+
+    public function actionUpdateUser()
+    {
+        $pattern = '/Bearer\s(\S+)/';
+        $getHeaders = Yii::$app->request->headers->get('Authorization');
+        preg_match($pattern, $getHeaders, $matches);
+        $data = [
+            "username" => $matches[1],
         ];
         return $this->asJson($data);
     }

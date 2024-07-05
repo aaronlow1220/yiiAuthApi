@@ -12,6 +12,7 @@ return [
         'POST v1/auth/register' => 'v1/auth/register',
         'POST v1/auth/login' => 'v1/auth/login',
         'POST v1/auth/logout' => 'v1/auth/logout',
+        'PUT v1/auth/user/<id>'=> 'v1/auth/update-user',
         'GET v1/auth/user/<id>'=> 'v1/auth/user',
     ],
 ];
