@@ -8,6 +8,7 @@ use app\models\users;
 use yii\filters\auth\HttpBearerAuth;
 use app\models\CLoginForm;
 use app\models\CRegisterForm;
+use app\models\CModifyUserForm;
 
 class AuthController extends Controller
 {
@@ -33,7 +34,7 @@ class AuthController extends Controller
     {
         $model = new CRegisterForm();
 
-        $model->attributes = Yii::$app->request->post('credentials');
+        $model->attributes = Yii::$app->request->post();
 
         if (!$model->validate()) {
             $data = [
@@ -76,12 +77,11 @@ class AuthController extends Controller
     {
         $model = new CLoginForm();
 
-        $model->attributes = Yii::$app->request->post('credentials');
+        $model->attributes = Yii::$app->request->post();
 
         if (!$model->validate()) {
             $data = [
-                "success" => false,
-                "message" => "Invalid data provided",
+                "error" => "Invalid data provided",
             ];
             return $this->asJson($data);
         }
@@ -90,8 +90,7 @@ class AuthController extends Controller
             $loggedUser = users::find()->where(["email" => $model->email])->one();
             if ($loggedUser == null) {
                 $data = [
-                    "success" => false,
-                    "message" => "User not found",
+                    "error" => "User not found",
                 ];
                 return $this->asJson($data);
             }
@@ -100,8 +99,6 @@ class AuthController extends Controller
                 $loggedUser->access_token = $newToken;
                 $loggedUser->update();
                 $data = [
-                    "success" => true,
-                    "message" => "Login successful",
                     "token" => $newToken,
                 ];
 
@@ -140,12 +137,47 @@ class AuthController extends Controller
 
     public function actionUpdateUser()
     {
-        $pattern = '/Bearer\s(\S+)/';
-        $getHeaders = Yii::$app->request->headers->get('Authorization');
-        preg_match($pattern, $getHeaders, $matches);
-        $data = [
-            "username" => $matches[1],
-        ];
+        $auth = $this->GetHeaderToken();
+        if ($auth == null) {
+            $data = [
+                "error" => "Unauthorized",
+            ];
+            $this->response->statusCode = 401;
+            return $this->asJson($data);
+        }
+
+        $user = users::findIdentityByAccessToken($auth);
+
+        if ($user == null) {
+            $data = [
+                "error" => "User not found",
+            ];
+            $this->response->statusCode = 401;
+            return $this->asJson($data);
+        }
+
+        $model = new CModifyUserForm();
+        $params = Yii::$app->request->getBodyParams();
+        $model->attributes = $params;
+        $data = [];
+
+        if (!$model->validate()) {
+            $data = [
+                "error" => "Invalid data provided",
+            ];
+            return $this->asJson($data);
+        }
+
+
+        foreach ($params as $name => $value) {
+            if ($name == 'password') {
+                $value = password_hash($value, PASSWORD_DEFAULT);
+            }
+            $user->$name = $value;
+            $user->update();
+            $data[$name] = $value;
+        }
+
         return $this->asJson($data);
     }
 
@@ -170,5 +202,16 @@ class AuthController extends Controller
             mt_rand(0, 0xffff),
             mt_rand(0, 0xffff)
         );
+    }
+
+    function GetHeaderToken()
+    {
+        $header = Yii::$app->request->headers->get('Authorization');
+        if ($header == null) {
+            return null;
+        }
+        $pattern = '/Bearer\s(\S+)/';
+        preg_match($pattern, $header, $matches);
+        return $matches[1];
     }
 }
