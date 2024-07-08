@@ -30,6 +30,13 @@ class AuthController extends Controller
         return $this->render('index', ["loggedInUser" => $loggedInUser]);
     }
 
+    /**
+     * @api {post} /v1/auth/register Register
+     * 
+     * Register a new user
+     * 
+     */
+
     public function actionRegister()
     {
         $model = new CRegisterForm();
@@ -81,6 +88,13 @@ class AuthController extends Controller
         return $this->asJson($data);
     }
 
+    /**
+     * @api {post} /v1/auth/login Login
+     * 
+     * Login a user
+     * 
+     */
+
     public function actionLogin()
     {
         $model = new CLoginForm();
@@ -128,6 +142,12 @@ class AuthController extends Controller
         return $this->asJson($data);
     }
 
+    /**
+     * @api {post} /v1/auth/logout Logout
+     * 
+     * Logout a user
+     * 
+     */
     public function actionLogout()
     {
         $loggedUser = users::find()->where(["access_token" => Yii::$app->request->post('access_token')])->one();
@@ -152,6 +172,12 @@ class AuthController extends Controller
         return $this->asJson($data);
     }
 
+    /**
+     * @api {put} /v1/user/ Update User
+     * 
+     * Update a user info
+     * 
+     */
     public function actionUpdateUser()
     {
         // Get the access token from the header
@@ -195,6 +221,7 @@ class AuthController extends Controller
 
         // Update the user data
         foreach ($params as $name => $value) {
+            // If the name is password, the value will be hashed
             if ($name == 'password') {
                 $value = password_hash($value, PASSWORD_DEFAULT);
             }
@@ -209,6 +236,12 @@ class AuthController extends Controller
         return $this->asJson($data);
     }
 
+    /**
+     * @api {get} /v1/user/:uuid Get User
+     * 
+     * Get a user info
+     * 
+     */
     public function actionUser()
     {
         // Find the user by the uuid
@@ -230,6 +263,13 @@ class AuthController extends Controller
         return $this->asJson($data);
     }
 
+    /** 
+     * 
+     * Generate UUID for user
+     * 
+     * @return string
+     * 
+     */
     function gen_uuid(): string
     {
         return sprintf(
