@@ -203,6 +203,9 @@ class AuthController extends Controller
             $data[$name] = $value;
         }
 
+        $user = users::findIdentityByAccessToken($auth);
+        $data["updatedAt"] = $user->updated_at;
+
         return $this->asJson($data);
     }
 
