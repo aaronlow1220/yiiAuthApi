@@ -285,7 +285,7 @@ class AuthController extends Controller
         );
     }
 
-    function GetHeaderToken()
+    function GetHeaderToken(): string
     {
         $header = Yii::$app->request->headers->get('Authorization');
         if ($header == null) {
