@@ -214,6 +214,7 @@ class AuthController extends Controller
         // Find the user by the uuid
         $user = users::find()->where(["uuid" => Yii::$app->request->get('uuid')])->one();
 
+        // If the user is not found, the server will return a 404 status code
         if ($user == null) {
             $data = [
                 "error" => "User not found",
