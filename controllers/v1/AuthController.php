@@ -19,7 +19,7 @@ class AuthController extends Controller
         $behaviors = parent::behaviors();
         $behaviors['authenticator'] = [
             'class' => HttpBearerAuth::className(),
-            'only' => ['index', 'user'],
+            'only' => ['index', 'user', 'logout', 'update-user'],
         ];
         return $behaviors;
     }
@@ -40,6 +40,7 @@ class AuthController extends Controller
             $data = [
                 "error" => "Invalid data provided",
             ];
+            Yii::$app->response->statusCode = 400;
             return $this->asJson($data);
         }
 
@@ -50,6 +51,7 @@ class AuthController extends Controller
             $data = [
                 "error" => "User already exists",
             ];
+            Yii::$app->response->statusCode = 409;
             return $this->asJson($data);
         }
 
@@ -70,6 +72,7 @@ class AuthController extends Controller
         $data = [
             "error" => "Register failed, please try again",
         ];
+        Yii::$app->response->statusCode = 400;
         return $this->asJson($data);
     }
 
@@ -83,6 +86,7 @@ class AuthController extends Controller
             $data = [
                 "error" => "Invalid data provided",
             ];
+            Yii::$app->response->statusCode = 400;
             return $this->asJson($data);
         }
 
@@ -92,6 +96,7 @@ class AuthController extends Controller
                 $data = [
                     "error" => "User not found",
                 ];
+                Yii::$app->response->statusCode = 400;
                 return $this->asJson($data);
             }
             if (password_verify($model->password, $loggedUser->password)) {
@@ -105,12 +110,11 @@ class AuthController extends Controller
                 return $this->asJson($data);
             }
         }
-        Yii::$app->response->statusCode = 400;
 
         $data = [
-            "success" => false,
-            "message" => "Login failed, please try again",
+            "error" => "Login failed, please try again",
         ];
+        Yii::$app->response->statusCode = 400;
         return $this->asJson($data);
     }
 
@@ -122,15 +126,13 @@ class AuthController extends Controller
             $loggedUser->access_token = null;
             $loggedUser->update();
             $data = [
-                "success" => true,
                 "message" => "Logout successful",
             ];
             return $this->asJson($data);
 
         }
         $data = [
-            "success" => false,
-            "message" => "User not found",
+            "error" => "User not found",
         ];
         return $this->asJson($data);
     }
@@ -152,19 +154,19 @@ class AuthController extends Controller
             $data = [
                 "error" => "User not found",
             ];
-            $this->response->statusCode = 401;
+            $this->response->statusCode = 400;
             return $this->asJson($data);
         }
 
         $model = new CModifyUserForm();
         $params = Yii::$app->request->getBodyParams();
         $model->attributes = $params;
-        $data = [];
 
         if (!$model->validate()) {
             $data = [
                 "error" => "Invalid data provided",
             ];
+            $this->response->statusCode = 400;
             return $this->asJson($data);
         }
 
@@ -183,8 +185,10 @@ class AuthController extends Controller
 
     public function actionUser()
     {
+        $user = users::find()->where(["uuid" => Yii::$app->request->get('uuid')])->one();
+        unset($user->password, $user->access_token, $user->auth_key, $user->status, $user->created_at, $user->updated_at);
         $data = [
-            "email" => Yii::$app->request->get('id'),
+            "data" => $user,
         ];
         return $this->asJson($data);
     }
