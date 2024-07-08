@@ -10,13 +10,11 @@ class CModifyUserForm extends Model
     public $username;
     public $email;
     public $password;
-    public $confirmPassword;
 
     public function rules()
     {
         return [
             ['email', 'email'],
-            ['confirmPassword', 'compare', 'compareAttribute' => 'password'],
         ];
     }
 }
