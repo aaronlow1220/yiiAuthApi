@@ -9,6 +9,7 @@ use yii\filters\auth\HttpBearerAuth;
 use app\models\CLoginForm;
 use app\models\CRegisterForm;
 use app\models\CModifyUserForm;
+use yii\web\HttpException;
 
 class AuthController extends Controller
 {
@@ -21,6 +22,7 @@ class AuthController extends Controller
             'class' => HttpBearerAuth::className(),
             'only' => ['index', 'user', 'logout', 'update-user'],
         ];
+
         return $behaviors;
     }
 
@@ -40,11 +42,7 @@ class AuthController extends Controller
 
         // If the data is not valid, the server will return a 400 status code
         if (!$model->validate()) {
-            $data = [
-                "error" => "Invalid data provided",
-            ];
-            Yii::$app->response->statusCode = 400;
-            return $this->asJson($data);
+            throw new HttpException(400, "Invalid data provided");
         }
 
         $query = users::find();
@@ -52,11 +50,7 @@ class AuthController extends Controller
 
         // If the user already exists, the server will return a 409 status code
         if ($user != null) {
-            $data = [
-                "error" => "User already exists",
-            ];
-            Yii::$app->response->statusCode = 409;
-            return $this->asJson($data);
+            throw new HttpException(409, "User already exists");
         }
 
         $userModel = new users();
@@ -66,19 +60,16 @@ class AuthController extends Controller
         $userModel->password = password_hash($model->password, PASSWORD_DEFAULT);
         $userModel->status = users::STATUS_ACTIVE;
 
-        // If the user is successfully registered, the server will return a 200 status code
-        if ($userModel->save()) {
-            $data = [
-                "id" => $userModel->uuid,
-            ];
-            return $this->asJson($data);
+        // If the user is not successfully registered, return a 400 status code
+        if (!$userModel->save()) {
+            throw new HttpException(400, "Failed to register user");
         }
 
-        // If the user is not successfully registered, the server will return a 400 status code
+        // If the user is successfully registered, return the user id
         $data = [
-            "error" => "Register failed, please try again",
+            "id" => $userModel->uuid,
         ];
-        Yii::$app->response->statusCode = 400;
+
         return $this->asJson($data);
     }
 
@@ -97,42 +88,32 @@ class AuthController extends Controller
 
         // When user submits the form, the data will be validated
 
-        // If the data is not valid, the server will return a 400 status code
+        // If the data is not valid, return a 400 status code
         if (!$model->validate()) {
-            $data = [
-                "error" => "Invalid data provided",
-            ];
-            Yii::$app->response->statusCode = 400;
-            return $this->asJson($data);
+            throw new HttpException(400, "Invalid data provided");
         }
 
         $loggedUser = users::find()->where(["email" => $model->email])->one();
-        // If the user is not found, the server will return a 400 status code
+
+        // If the user is not found, return a 400 status code
         if ($loggedUser == null) {
-            $data = [
-                "error" => "User not found",
-            ];
-            Yii::$app->response->statusCode = 400;
-            return $this->asJson($data);
+            throw new HttpException(400, "User not found");
         }
 
-        // If the password is correct, the server will return a access token
-        if (password_verify($model->password, $loggedUser->password)) {
-            $newToken = users::generateAccessToken();
-            $loggedUser->access_token = $newToken;
-            $loggedUser->update();
-            $data = [
-                "token" => $newToken,
-            ];
-
-            return $this->asJson($data);
+        // If the password is incorrect, return a 400 status code
+        if (!password_verify($model->password, $loggedUser->password)) {
+            throw new HttpException(400, "Login failed, please try again");
         }
 
-        // If the password is incorrect, the server will return a 400 status code
+        // Generate a new access token
+        $newToken = users::generateAccessToken();
+        $loggedUser->access_token = $newToken;
+        $loggedUser->update();
+
         $data = [
-            "error" => "Login failed, please try again",
+            "token" => $newToken,
         ];
-        Yii::$app->response->statusCode = 400;
+
         return $this->asJson($data);
     }
 
@@ -146,24 +127,21 @@ class AuthController extends Controller
     {
         $loggedUser = users::find()->where(["access_token" => Yii::$app->request->post('access_token')])->one();
 
-        // If the user is found, the server will return message
-        if ($loggedUser != null) {
-            $loggedUser->access_token = null;
-            $loggedUser->update();
-            $data = [
-                "message" => "Logout successful",
-            ];
-
-            return $this->asJson($data);
-
+        // If the user is found, the server will return a 404 status code
+        if ($loggedUser == null) {
+            throw new HttpException(404, "User not found");
         }
 
-        // If the user is not found, the server will return a 404 status code
+        // Set the access token to null
+        $loggedUser->access_token = null;
+        $loggedUser->update();
+
         $data = [
-            "error" => "User not found",
+            "message" => "Logout successful",
         ];
-        Yii::$app->response->statusCode = 404;
+
         return $this->asJson($data);
+
     }
 
     /**
@@ -179,11 +157,7 @@ class AuthController extends Controller
 
         // If the access token is not found, the server will return a 401 status code
         if ($auth == null) {
-            $data = [
-                "error" => "Unauthorized",
-            ];
-            $this->response->statusCode = 401;
-            return $this->asJson($data);
+            throw new HttpException(401, "Unauthorized");
         }
 
         // Find the user by the access token
@@ -191,11 +165,7 @@ class AuthController extends Controller
 
         // If the user is not found, the server will return a 404 status code
         if ($user == null) {
-            $data = [
-                "error" => "User not found",
-            ];
-            $this->response->statusCode = 404;
-            return $this->asJson($data);
+            throw new HttpException(404, "User not found");
         }
 
         $model = new CModifyUserForm();
@@ -206,11 +176,7 @@ class AuthController extends Controller
 
         // If the data is not valid, the server will return a 400 status code
         if (!$model->validate()) {
-            $data = [
-                "error" => "Invalid data provided",
-            ];
-            $this->response->statusCode = 400;
-            return $this->asJson($data);
+            throw new HttpException(400, "Invalid data provided");
         }
 
         // Update the user data
@@ -225,6 +191,7 @@ class AuthController extends Controller
         }
 
         $user = users::findIdentityByAccessToken($auth);
+
         $data["updatedAt"] = $user->updated_at;
 
         return $this->asJson($data);
@@ -243,17 +210,15 @@ class AuthController extends Controller
 
         // If the user is not found, the server will return a 404 status code
         if ($user == null) {
-            $data = [
-                "error" => "User not found",
-            ];
-            Yii::$app->response->statusCode = 404;
-            return $this->asJson($data);
+            throw new HttpException(404, "User not found");
         }
         // Unset the sensitive data
         unset($user->password, $user->access_token, $user->auth_key, $user->status, $user->created_at, $user->updated_at);
+
         $data = [
             "data" => $user,
         ];
+
         return $this->asJson($data);
     }
 
