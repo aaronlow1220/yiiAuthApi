@@ -144,11 +144,11 @@ class AuthController extends Controller
 
         }
 
-        // If the user is not found, the server will return a 400 status code
+        // If the user is not found, the server will return a 404 status code
         $data = [
             "error" => "User not found",
         ];
-        Yii::$app->response->statusCode = 400;
+        Yii::$app->response->statusCode = 404;
         return $this->asJson($data);
     }
 
@@ -169,12 +169,12 @@ class AuthController extends Controller
         // Find the user by the access token
         $user = users::findIdentityByAccessToken($auth);
 
-        // If the user is not found, the server will return a 400 status code
+        // If the user is not found, the server will return a 404 status code
         if ($user == null) {
             $data = [
                 "error" => "User not found",
             ];
-            $this->response->statusCode = 400;
+            $this->response->statusCode = 404;
             return $this->asJson($data);
         }
 
@@ -214,6 +214,13 @@ class AuthController extends Controller
         // Find the user by the uuid
         $user = users::find()->where(["uuid" => Yii::$app->request->get('uuid')])->one();
 
+        if ($user == null) {
+            $data = [
+                "error" => "User not found",
+            ];
+            Yii::$app->response->statusCode = 404;
+            return $this->asJson($data);
+        }
         // Unset the sensitive data
         unset($user->password, $user->access_token, $user->auth_key, $user->status, $user->created_at, $user->updated_at);
         $data = [
