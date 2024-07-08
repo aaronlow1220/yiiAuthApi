@@ -9,7 +9,6 @@ use yii\filters\auth\HttpBearerAuth;
 use app\models\CLoginForm;
 use app\models\CRegisterForm;
 use app\models\CModifyUserForm;
-use yii\web\HttpException;
 
 class AuthController extends Controller
 {
@@ -24,7 +23,7 @@ class AuthController extends Controller
         ];
         return $behaviors;
     }
-    
+
     /**
      * @api {post} /v1/auth/register Register
      * 
@@ -192,13 +191,11 @@ class AuthController extends Controller
 
         // If the user is not found, the server will return a 404 status code
         if ($user == null) {
-            // $data = [
-            //     "error" => "User not found",
-            // ];
-            // $this->response->statusCode = 404;
-            // return $this->asJson($data);
-            // throw HttpException(404, "User not found");
-            
+            $data = [
+                "error" => "User not found",
+            ];
+            $this->response->statusCode = 404;
+            return $this->asJson($data);
         }
 
         $model = new CModifyUserForm();
