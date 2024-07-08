@@ -7,8 +7,8 @@ return [
         [
             'class' => 'yii\rest\UrlRule',
             'controller' => 'v1/auth',
+            'pluralize' => false,
         ],
-        'POST v1/auth/register' => 'v1/auth/register',
         'POST v1/auth/login' => 'v1/auth/login',
         'POST v1/auth/logout' => 'v1/auth/logout',
         'PUT v1/user/'=> 'v1/auth/update-user',

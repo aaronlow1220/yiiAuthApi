@@ -33,7 +33,7 @@ class AuthController extends Controller
      * 
      */
 
-    public function actionRegister()
+    public function actionCreate()
     {
         $model = new CRegisterForm();
 
