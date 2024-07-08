@@ -24,14 +24,7 @@ class AuthController extends Controller
         ];
         return $behaviors;
     }
-
-    public function actionIndex()
-    {
-        throw new HttpException(400, "Not Found");
-        $loggedInUser = Yii::$app->user->identity;
-        return $this->render('index', ["loggedInUser" => $loggedInUser]);
-    }
-
+    
     /**
      * @api {post} /v1/auth/register Register
      * 
