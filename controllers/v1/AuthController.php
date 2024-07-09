@@ -45,7 +45,7 @@ class AuthController extends Controller
         }
 
         // If the user already exists, the server will return a 409 status code
-        if (users::getUser($model->email)) {
+        if (users::getAccount($model->email)) {
             throw new HttpException(409, "User already exists");
         }
 
@@ -87,7 +87,7 @@ class AuthController extends Controller
             throw new HttpException(400, "Invalid data provided");
         }
 
-        $loggedUser = users::getUser($model->email);
+        $loggedUser = users::getAccount($model->email);
 
         // If the user is not found, return a 400 status code
         if (!$loggedUser) {

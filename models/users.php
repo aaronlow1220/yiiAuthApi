@@ -45,10 +45,6 @@ class users extends ActiveRecord implements IdentityInterface
         return $this->getAuthKey() === $authKey;
     }
 
-    public function validatePassword($password) {
-        return Yii::$app->getSecurity()->validatePassword($password, $this->password);
-    }
-
     public function beforeSave($insert)
     {
         if (!parent::beforeSave($insert)) {
@@ -62,7 +58,7 @@ class users extends ActiveRecord implements IdentityInterface
         return true;
     }
 
-    public static function getUser($email)
+    public static function getAccount($email)
     {
         return static::findOne(['email' => $email]);
     }
