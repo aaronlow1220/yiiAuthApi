@@ -60,9 +60,12 @@ class User extends ActiveRecord implements IdentityInterface
 
     public function beforeSave($insert)
     {
+        // The "Save" is an Update
         if (!parent::beforeSave($insert)) {
             return false;
         }
+
+        // The "Save" is an save and it is a new record
         if ($this->isNewRecord) {
             $this->uuid = static::gen_uuid();
             $this->status = static::STATUS_ACTIVE;
