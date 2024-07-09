@@ -50,7 +50,6 @@ class UserController extends Controller
         $model = new ModifyUserForm();
         $params = Yii::$app->request->getBodyParams();
         $model->attributes = $params;
-
         // When user submits the form, the data will be validated
 
         // If the data is not valid, the server will return a 400 status code

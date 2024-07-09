@@ -50,10 +50,8 @@ class AuthController extends Controller
         }
 
         $userModel = new User();
-        $userModel->load(["User"=>Yii::$app->request->post()]);
+        $userModel->load(["User" => Yii::$app->request->post()]);
         $userModel->password = Yii::$app->getSecurity()->generatePasswordHash($model->password);
-
-        // return $userModel;
 
         // If the user is not successfully registered, return a 400 status code
         if (!$userModel->save()) {
@@ -80,7 +78,6 @@ class AuthController extends Controller
         $model = new LoginForm();
 
         $model->attributes = Yii::$app->request->post();
-
         // When user submits the form, the data will be validated
 
         // If the data is not valid, return a 400 status code
