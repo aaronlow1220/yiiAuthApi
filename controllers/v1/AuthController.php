@@ -45,20 +45,15 @@ class AuthController extends Controller
             throw new HttpException(400, "Invalid data provided");
         }
 
-        $query = users::find();
-        $user = $query->where(['email' => $model->email])->one();
-
         // If the user already exists, the server will return a 409 status code
-        if ($user != null) {
+        if (users::accountExist($model->email)) {
             throw new HttpException(409, "User already exists");
         }
 
         $userModel = new users();
-        $userModel->uuid = $this->gen_uuid();
         $userModel->username = $model->username;
         $userModel->email = $model->email;
-        $userModel->password = password_hash($model->password, PASSWORD_DEFAULT);
-        $userModel->status = users::STATUS_ACTIVE;
+        $userModel->password = Yii::$app->getSecurity()->generatePasswordHash($model->password);
 
         // If the user is not successfully registered, return a 400 status code
         if (!$userModel->save()) {
@@ -101,7 +96,7 @@ class AuthController extends Controller
         }
 
         // If the password is incorrect, return a 400 status code
-        if (!password_verify($model->password, $loggedUser->password)) {
+        if (!Yii::$app->getSecurity()->validatePassword($model->password, $loggedUser->password)) {
             throw new HttpException(400, "Login failed, please try again");
         }
 

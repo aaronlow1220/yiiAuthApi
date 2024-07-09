@@ -25,7 +25,8 @@ class users extends ActiveRecord implements IdentityInterface
         return static::findOne(['access_token' => $token]);
     }
 
-    public static function generateAccessToken(){
+    public static function generateAccessToken()
+    {
         return Yii::$app->security->generateRandomString();
     }
 
@@ -46,14 +47,34 @@ class users extends ActiveRecord implements IdentityInterface
 
     public function beforeSave($insert)
     {
-        if (parent::beforeSave($insert)) {
-            if ($this->isNewRecord) {
-                $this->auth_key = Yii::$app->security->generateRandomString();
-            }
-            return true;
+        if (!parent::beforeSave($insert)) {
+            return false;
         }
-        return false;
+        if ($this->isNewRecord) {
+            $this->uuid = static::gen_uuid();
+            $this->status = static::STATUS_ACTIVE;
+            $this->auth_key = Yii::$app->security->generateRandomString();
+        }
+        return true;
     }
 
-    
+    public static function accountExist($email)
+    {
+        return static::findOne(['email' => $email]);
+    }
+
+    public static function gen_uuid(): string
+    {
+        return sprintf(
+            '%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
+            mt_rand(0, 0xffff),
+            mt_rand(0, 0xffff),
+            mt_rand(0, 0xffff),
+            mt_rand(0, 0x0fff) | 0x4000,
+            mt_rand(0, 0x3fff) | 0x8000,
+            mt_rand(0, 0xffff),
+            mt_rand(0, 0xffff),
+            mt_rand(0, 0xffff)
+        );
+    }
 }
