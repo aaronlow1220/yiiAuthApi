@@ -4,7 +4,7 @@ namespace app\controllers\v1;
 
 use Yii;
 use yii\web\Controller;
-use app\models\users;
+use app\models\User;
 use yii\filters\auth\HttpBearerAuth;
 use app\models\LoginForm;
 use app\models\RegisterForm;
@@ -45,11 +45,11 @@ class AuthController extends Controller
         }
 
         // If the user already exists, the server will return a 409 status code
-        if (users::getUser($model->email)) {
+        if (User::getUser($model->email)) {
             throw new HttpException(409, "User already exists");
         }
 
-        $userModel = new users();
+        $userModel = new User();
         $userModel->username = $model->username;
         $userModel->email = $model->email;
         $userModel->password = Yii::$app->getSecurity()->generatePasswordHash($model->password);
@@ -87,7 +87,7 @@ class AuthController extends Controller
             throw new HttpException(400, "Invalid data provided");
         }
 
-        $loggedUser = users::getUser($model->email);
+        $loggedUser = User::getUser($model->email);
 
         // If the user is not found, return a 400 status code
         if (!$loggedUser) {
@@ -100,7 +100,7 @@ class AuthController extends Controller
         }
 
         // Generate a new access token
-        $newToken = users::generateAccessToken();
+        $newToken = User::generateAccessToken();
         $loggedUser->access_token = $newToken;
         $loggedUser->update();
 
@@ -119,7 +119,7 @@ class AuthController extends Controller
      */
     public function actionLogout()
     {
-        $loggedUser = users::find()->where(["access_token" => Yii::$app->request->post('access_token')])->one();
+        $loggedUser = User::find()->where(["access_token" => Yii::$app->request->post('access_token')])->one();
 
         // If the user is found, the server will return a 404 status code
         if ($loggedUser == null) {
@@ -155,7 +155,7 @@ class AuthController extends Controller
         }
 
         // Find the user by the access token
-        $user = users::findIdentityByAccessToken($auth);
+        $user = User::findIdentityByAccessToken($auth);
 
         // If the user is not found, the server will return a 404 status code
         if ($user == null) {
@@ -184,7 +184,7 @@ class AuthController extends Controller
             $data[$name] = $value;
         }
 
-        $user = users::findIdentityByAccessToken($auth);
+        $user = User::findIdentityByAccessToken($auth);
 
         $data["updatedAt"] = $user->updated_at;
 
@@ -200,7 +200,7 @@ class AuthController extends Controller
     public function actionUser()
     {
         // Find the user by the uuid
-        $user = users::find()->where(["uuid" => Yii::$app->request->get('uuid')])->one();
+        $user = User::find()->where(["uuid" => Yii::$app->request->get('uuid')])->one();
 
         // If the user is not found, the server will return a 404 status code
         if ($user == null) {
