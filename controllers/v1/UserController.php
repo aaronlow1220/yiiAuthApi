@@ -40,7 +40,7 @@ class UserController extends Controller
         }
 
         // Find the user by the access token
-        $user = User::findIdentityByAccessToken($auth);
+        $user = User::findIdentityByUUID(Yii::$app->request->get("uuid"));
 
         // If the user is not found, the server will return a 404 status code
         if ($user == null) {

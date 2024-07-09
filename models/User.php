@@ -20,6 +20,11 @@ class User extends ActiveRecord implements IdentityInterface
         return static::findOne($id);
     }
 
+    public static function findIdentityByUUID($uuid)
+    {
+        return static::findOne(["uuid" => $uuid]);
+    }
+
     public static function findIdentityByAccessToken($token, $type = null)
     {
         return static::findOne(['access_token' => $token]);
@@ -78,5 +83,5 @@ class User extends ActiveRecord implements IdentityInterface
         );
     }
 
-    
+
 }
