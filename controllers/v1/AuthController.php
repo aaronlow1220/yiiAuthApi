@@ -8,7 +8,6 @@ use app\models\User;
 use yii\filters\auth\HttpBearerAuth;
 use app\models\LoginForm;
 use app\models\RegisterForm;
-use app\models\ModifyUserForm;
 use yii\web\HttpException;
 
 class AuthController extends Controller
