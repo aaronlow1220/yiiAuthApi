@@ -10,6 +10,14 @@ class User extends ActiveRecord implements IdentityInterface
     const STATUS_ACTIVE = 1;
     const STATUS_INACTIVE = 0;
 
+    // public function rules()
+    // {
+    //     return [
+    //         [['username', 'email', 'password'], 'required'],
+    //         ['email', 'email'],
+    //     ];
+    // }
+
     public static function tableName()
     {
         return 'users';

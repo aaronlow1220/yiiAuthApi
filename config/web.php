@@ -19,7 +19,7 @@ $config = [
             'charset' => 'UTF-8',
         ],
         'user' => [
-            'identityClass' => 'app\models\users',
+            'identityClass' => 'app\models\User',
         ],
         'db' => $db,
         'urlManager' => $urlManager,
