@@ -8,10 +8,19 @@ return [
             'class' => 'yii\rest\UrlRule',
             'controller' => 'v1/auth',
             'pluralize' => false,
+            'extraPatterns' => [
+                'POST login' => 'login',
+                'POST register' => 'create',
+                'POST logout' => 'logout',
+            ],
         ],
-        'POST v1/auth/login' => 'v1/auth/login',
-        'POST v1/auth/logout' => 'v1/auth/logout',
-        'PUT v1/user/'=> 'v1/auth/update-user',
-        'GET v1/user/<uuid>'=> 'v1/auth/user',
+        [
+            'class' => 'yii\rest\UrlRule',
+            'controller' => 'v1/user',
+            'pluralize' => false,
+            'extraPatterns' => [
+                'PUT <uuid>' => 'update',
+            ],
+        ],
     ],
 ];
