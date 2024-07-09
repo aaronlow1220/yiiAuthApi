@@ -7,8 +7,8 @@ use yii\web\Controller;
 use app\models\users;
 use yii\filters\auth\HttpBearerAuth;
 use app\models\LoginForm;
-use app\models\CRegisterForm;
-use app\models\CModifyUserForm;
+use app\models\RegisterForm;
+use app\models\ModifyUserForm;
 use yii\web\HttpException;
 
 class AuthController extends Controller
@@ -34,7 +34,7 @@ class AuthController extends Controller
 
     public function actionCreate()
     {
-        $model = new CRegisterForm();
+        $model = new RegisterForm();
 
         $model->attributes = Yii::$app->request->post();
         // When user submits the form, the data will be validated
@@ -162,7 +162,7 @@ class AuthController extends Controller
             throw new HttpException(404, "User not found");
         }
 
-        $model = new CModifyUserForm();
+        $model = new ModifyUserForm();
         $params = Yii::$app->request->getBodyParams();
         $model->attributes = $params;
 

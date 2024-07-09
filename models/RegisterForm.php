@@ -5,16 +5,19 @@ namespace app\models;
 use Yii;
 use yii\base\Model;
 
-class CModifyUserForm extends Model
+class RegisterForm extends Model
 {
     public $username;
     public $email;
     public $password;
+    public $confirmPassword;
 
     public function rules()
     {
         return [
+            [['username', 'email', 'password', 'confirmPassword'], 'required'],
             ['email', 'email'],
+            ['confirmPassword', 'compare', 'compareAttribute' => 'password'],
         ];
     }
 }
