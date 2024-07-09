@@ -13,7 +13,6 @@ use yii\web\HttpException;
 
 class AuthController extends Controller
 {
-    public $enableCsrfValidation = false;
 
     public function behaviors()
     {

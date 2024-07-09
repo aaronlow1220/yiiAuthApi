@@ -10,6 +10,7 @@ $config = [
     'components' => [
         'request' => [
             'cookieValidationKey' => 'rMyLGf-KEQFr5_cEvOR6ZDcHZNIKzIbo',
+            'enableCsrfValidation' => false,
             'parsers' => [
                 "application/json" => "yii\web\JsonParser",
             ],
