@@ -6,7 +6,7 @@ use Yii;
 use yii\web\Controller;
 use app\models\users;
 use yii\filters\auth\HttpBearerAuth;
-use app\models\CLoginForm;
+use app\models\LoginForm;
 use app\models\CRegisterForm;
 use app\models\CModifyUserForm;
 use yii\web\HttpException;
@@ -76,7 +76,7 @@ class AuthController extends Controller
 
     public function actionLogin()
     {
-        $model = new CLoginForm();
+        $model = new LoginForm();
 
         $model->attributes = Yii::$app->request->post();
 
