@@ -19,7 +19,7 @@ class AuthController extends Controller
         $behaviors = parent::behaviors();
         $behaviors['authenticator'] = [
             'class' => HttpBearerAuth::className(),
-            'only' => ['index', 'user', 'logout', 'update-user'],
+            'only' => ['logout'],
         ];
 
         return $behaviors;
@@ -136,59 +136,6 @@ class AuthController extends Controller
 
         return $this->asJson($data);
 
-    }
-
-    /**
-     * @api {put} /v1/user/ Update User
-     * 
-     * Update a user info
-     * 
-     */
-    public function actionUpdateUser()
-    {
-        // Get the access token from the header
-        $auth = $this->GetHeaderToken();
-
-        // If the access token is not found, the server will return a 401 status code
-        if ($auth == null) {
-            throw new HttpException(401, "Unauthorized");
-        }
-
-        // Find the user by the access token
-        $user = User::findIdentityByAccessToken($auth);
-
-        // If the user is not found, the server will return a 404 status code
-        if ($user == null) {
-            throw new HttpException(404, "User not found");
-        }
-
-        $model = new ModifyUserForm();
-        $params = Yii::$app->request->getBodyParams();
-        $model->attributes = $params;
-
-        // When user submits the form, the data will be validated
-
-        // If the data is not valid, the server will return a 400 status code
-        if (!$model->validate()) {
-            throw new HttpException(400, "Invalid data provided");
-        }
-
-        // Update the user data
-        foreach ($params as $name => $value) {
-            // If the name is password, the value will be hashed
-            if ($name == 'password') {
-                $value = password_hash($value, PASSWORD_DEFAULT);
-            }
-            $user->$name = $value;
-            $user->update();
-            $data[$name] = $value;
-        }
-
-        $user = User::findIdentityByAccessToken($auth);
-
-        $data["updatedAt"] = $user->updated_at;
-
-        return $this->asJson($data);
     }
 
     function GetHeaderToken(): string

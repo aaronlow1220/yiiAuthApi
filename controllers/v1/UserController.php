@@ -17,7 +17,7 @@ class UserController extends Controller
         $behaviors = parent::behaviors();
         $behaviors['authenticator'] = [
             'class' => HttpBearerAuth::className(),
-            'only' => ['update-user'],
+            'only' => ['update', 'user'],
         ];
 
         return $behaviors;
