@@ -58,7 +58,7 @@ class users extends ActiveRecord implements IdentityInterface
         return true;
     }
 
-    public static function accountExist($email)
+    public static function getAccount($email)
     {
         return static::findOne(['email' => $email]);
     }
@@ -77,4 +77,6 @@ class users extends ActiveRecord implements IdentityInterface
             mt_rand(0, 0xffff)
         );
     }
+
+    
 }
