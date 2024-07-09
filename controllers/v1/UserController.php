@@ -61,7 +61,7 @@ class UserController extends Controller
         foreach ($params as $name => $value) {
             // If the name is password, the value will be hashed
             if ($name == 'password') {
-                $value = password_hash($value, PASSWORD_DEFAULT);
+                $value = Yii::$app->getSecurity()->generatePasswordHash($value);
             }
             $user->$name = $value;
             $user->update();
