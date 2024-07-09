@@ -50,9 +50,10 @@ class AuthController extends Controller
         }
 
         $userModel = new User();
-        $userModel->username = $model->username;
-        $userModel->email = $model->email;
+        $userModel->load(["User"=>Yii::$app->request->post()]);
         $userModel->password = Yii::$app->getSecurity()->generatePasswordHash($model->password);
+
+        // return $userModel;
 
         // If the user is not successfully registered, return a 400 status code
         if (!$userModel->save()) {
