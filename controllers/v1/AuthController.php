@@ -191,53 +191,6 @@ class AuthController extends Controller
         return $this->asJson($data);
     }
 
-    /**
-     * @api {get} /v1/user/:uuid Get User
-     * 
-     * Get a user info
-     * 
-     */
-    public function actionUser()
-    {
-        // Find the user by the uuid
-        $user = User::find()->where(["uuid" => Yii::$app->request->get('uuid')])->one();
-
-        // If the user is not found, the server will return a 404 status code
-        if ($user == null) {
-            throw new HttpException(404, "User not found");
-        }
-        // Unset the sensitive data
-        unset($user->password, $user->access_token, $user->auth_key, $user->status, $user->created_at, $user->updated_at);
-
-        $data = [
-            "data" => $user,
-        ];
-
-        return $this->asJson($data);
-    }
-
-    /** 
-     * 
-     * Generate UUID for user
-     * 
-     * @return string
-     * 
-     */
-    function gen_uuid(): string
-    {
-        return sprintf(
-            '%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
-            mt_rand(0, 0xffff),
-            mt_rand(0, 0xffff),
-            mt_rand(0, 0xffff),
-            mt_rand(0, 0x0fff) | 0x4000,
-            mt_rand(0, 0x3fff) | 0x8000,
-            mt_rand(0, 0xffff),
-            mt_rand(0, 0xffff),
-            mt_rand(0, 0xffff)
-        );
-    }
-
     function GetHeaderToken(): string
     {
         $header = Yii::$app->request->headers->get('Authorization');

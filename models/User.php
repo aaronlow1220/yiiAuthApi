@@ -82,6 +82,4 @@ class User extends ActiveRecord implements IdentityInterface
             mt_rand(0, 0xffff)
         );
     }
-
-
 }

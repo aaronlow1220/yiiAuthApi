@@ -3,7 +3,7 @@ return [
     'enablePrettyUrl' => true,
     'showScriptName' => false,
     'enableStrictParsing' => true,
-    'rules' => [
+    'rules' => [ // Auth
         [
             'class' => 'yii\rest\UrlRule',
             'controller' => 'v1/auth',
@@ -14,11 +14,12 @@ return [
                 'POST logout' => 'logout',
             ],
         ],
-        [
+        [ // User
             'class' => 'yii\rest\UrlRule',
             'controller' => 'v1/user',
             'pluralize' => false,
             'extraPatterns' => [
+                'GET <uuid>' => 'user',
                 'PUT <uuid>' => 'update',
             ],
         ],

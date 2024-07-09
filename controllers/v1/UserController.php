@@ -24,7 +24,7 @@ class UserController extends Controller
     }
 
     /**
-     * @api {put} /v1/user/ Update User
+     * @api {put} /v1/user/<uuid> Update User
      * 
      * Update a user info
      * 
@@ -39,7 +39,7 @@ class UserController extends Controller
             throw new HttpException(401, "Unauthorized");
         }
 
-        // Find the user by the access token
+        // Find the user by UUID
         $user = User::findIdentityByUUID(Yii::$app->request->get("uuid"));
 
         // If the user is not found, the server will return a 404 status code
@@ -77,7 +77,7 @@ class UserController extends Controller
     }
 
     /**
-     * @api {get} /v1/user/:uuid Get User
+     * @api {get} /v1/user/<uuid>:uuid Get User
      * 
      * Get a user info
      * 
@@ -85,7 +85,7 @@ class UserController extends Controller
     public function actionUser()
     {
         // Find the user by the uuid
-        $user = User::find()->where(["uuid" => Yii::$app->request->get('uuid')])->one();
+        $user = User::findIdentityByUUID(Yii::$app->request->get("uuid"));
 
         // If the user is not found, the server will return a 404 status code
         if ($user == null) {
