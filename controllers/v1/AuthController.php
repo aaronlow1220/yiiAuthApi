@@ -6,8 +6,6 @@ use Yii;
 use yii\web\Controller;
 use app\models\User;
 use yii\filters\auth\HttpBearerAuth;
-use app\models\LoginForm;
-use app\models\RegisterForm;
 use yii\web\HttpException;
 
 class AuthController extends Controller
@@ -52,7 +50,7 @@ class AuthController extends Controller
      */
     public function actionLogin()
     {
-        $model = new User(['scenario' => User::SCENARIO_Login]);
+        $model = new User(['scenario' => User::SCENARIO_LOGIN]);
         $login = null;
         if (!($model->load(Yii::$app->request->post(), '') && $login = $model->login())) {
             return $model->getFirstErrors();
