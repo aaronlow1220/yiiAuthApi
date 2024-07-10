@@ -68,7 +68,7 @@ class UserController extends Controller
             $data[$name] = $value;
         }
 
-        $user = User::findIdentityByAccessToken($auth);
+        $user = User::findIdentityByUUID(Yii::$app->request->get("uuid"));
 
         $data["updatedAt"] = $user->updated_at;
 
