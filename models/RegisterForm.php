@@ -46,7 +46,6 @@ class RegisterForm extends Model
             return false;
         }
 
-
         return $uuid;
     }
 
