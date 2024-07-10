@@ -11,8 +11,8 @@ class User extends ActiveRecord implements IdentityInterface
     const SCENARIO_LOGIN = 'login';
     const STATUS_ACTIVE = 1;
     const STATUS_INACTIVE = 0;
-    private $access_token;
     public $confirmPassword;
+    public $_user;
 
     public function rules()
     {
@@ -86,7 +86,7 @@ class User extends ActiveRecord implements IdentityInterface
 
     public function beforeSave($insert)
     {
-        if (parent::beforeSave($insert)) {
+        if (!parent::beforeSave($insert)) {
             return false;
         }
         if ($this->isNewRecord) {
@@ -108,6 +108,22 @@ class User extends ActiveRecord implements IdentityInterface
         }
 
         return $uuid;
+    }
+
+    public function login()
+    {
+        $_user = User::getUser($this->email);
+
+        if (!$_user || !$_user->validatePassword($this->password)) {
+            return false;
+        }
+
+        $accessToken = $_user->generateAccessToken();
+        $_user->access_token = $accessToken;
+        if (!$_user->update()) {
+            return $_user->getErrors();
+        }
+        return $accessToken;
     }
 
     public static function gen_uuid(): string
