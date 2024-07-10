@@ -31,14 +31,6 @@ class UserController extends Controller
      */
     public function actionUpdate()
     {
-        // Get the access token from the header
-        $auth = $this->GetHeaderToken();
-
-        // If the access token is not found, the server will return a 401 status code
-        if ($auth == null) {
-            throw new HttpException(401, "Unauthorized");
-        }
-
         // Find the user by UUID
         $user = User::findIdentityByUUID(Yii::$app->request->get("uuid"));
 
