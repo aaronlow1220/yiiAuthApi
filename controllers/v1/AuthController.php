@@ -71,7 +71,7 @@ class AuthController extends Controller
      */
     public function actionLogout()
     {
-        $loggedUser = User::find()->where(["access_token" => Yii::$app->request->post('access_token')])->one();
+        $loggedUser = User::findIdentityByAccessToken($this->GetHeaderToken());
 
         // If the user is found, the server will return a 404 status code
         if ($loggedUser == null) {
