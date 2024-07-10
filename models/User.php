@@ -9,6 +9,7 @@ class User extends ActiveRecord implements IdentityInterface
 {
     const STATUS_ACTIVE = 1;
     const STATUS_INACTIVE = 0;
+    private $access_token;
 
     public function rules()
     {
@@ -38,9 +39,10 @@ class User extends ActiveRecord implements IdentityInterface
         return static::findOne(['access_token' => $token]);
     }
 
-    public static function generateAccessToken()
+    public function generateAccessToken()
     {
-        return Yii::$app->security->generateRandomString();
+        $this->access_token = Yii::$app->security->generateRandomString();
+        return $this->access_token;
     }
 
     public function getId()
@@ -56,6 +58,10 @@ class User extends ActiveRecord implements IdentityInterface
     public function validateAuthKey($authKey)
     {
         return $this->getAuthKey() === $authKey;
+    }
+
+    public function validatePassword($password){
+        return Yii::$app->security->validatePassword($password, $this->password);
     }
 
     public function beforeSave($insert)

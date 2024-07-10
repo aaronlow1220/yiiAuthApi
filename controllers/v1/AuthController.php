@@ -71,40 +71,15 @@ class AuthController extends Controller
      * Login a user
      * 
      */
-
     public function actionLogin()
     {
         $model = new LoginForm();
-
-        $model->attributes = Yii::$app->request->post();
-        // When user submits the form, the data will be validated
-
-        // If the data is not valid, return a 400 status code
-        if (!$model->validate()) {
-            throw new HttpException(400, "Invalid data provided");
+        if (!($model->load(Yii::$app->request->post(), '') && $model->login())) {
+            return $model->getFirstErrors();
         }
-
-        $loggedUser = User::getUser($model->email);
-
-        // If the user is not found, return a 400 status code
-        if (!$loggedUser) {
-            throw new HttpException(400, "User not found");
-        }
-
-        // If the password is incorrect, return a 400 status code
-        if (!Yii::$app->getSecurity()->validatePassword($model->password, $loggedUser->password)) {
-            throw new HttpException(400, "Login failed, please try again");
-        }
-
-        // Generate a new access token
-        $newToken = User::generateAccessToken();
-        $loggedUser->access_token = $newToken;
-        $loggedUser->update();
-
         $data = [
-            "token" => $newToken,
+            "access_token" => $model->login(),
         ];
-
         return $this->asJson($data);
     }
 
