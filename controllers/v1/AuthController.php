@@ -32,7 +32,7 @@ class AuthController extends Controller
      */
     public function actionRegister()
     {
-        $model = new RegisterForm();
+        $model = new User();
         $register = null;
         if (!($model->load(Yii::$app->request->post(), '') && $register = $model->register())) {
             return $model->getFirstErrors();
