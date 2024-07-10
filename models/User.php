@@ -64,39 +64,8 @@ class User extends ActiveRecord implements IdentityInterface
         return Yii::$app->security->validatePassword($password, $this->password);
     }
 
-    public function beforeSave($insert)
-    {
-        // The "Save" is an Update
-        if (!parent::beforeSave($insert)) {
-            return false;
-        }
-
-        // The "Save" is an save and it is a new record
-        if ($this->isNewRecord) {
-            $this->uuid = static::gen_uuid();
-            $this->status = static::STATUS_ACTIVE;
-            $this->auth_key = Yii::$app->security->generateRandomString();
-        }
-        return true;
-    }
-
     public static function getUser($email)
     {
         return static::findOne(['email' => $email]);
-    }
-
-    public static function gen_uuid(): string
-    {
-        return sprintf(
-            '%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
-            mt_rand(0, 0xffff),
-            mt_rand(0, 0xffff),
-            mt_rand(0, 0xffff),
-            mt_rand(0, 0x0fff) | 0x4000,
-            mt_rand(0, 0x3fff) | 0x8000,
-            mt_rand(0, 0xffff),
-            mt_rand(0, 0xffff),
-            mt_rand(0, 0xffff)
-        );
     }
 }

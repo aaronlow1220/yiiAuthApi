@@ -10,7 +10,7 @@ return [
             'pluralize' => false,
             'extraPatterns' => [
                 'POST login' => 'login',
-                'POST register' => 'create',
+                'POST register' => 'register',
                 'POST logout' => 'logout',
             ],
         ],

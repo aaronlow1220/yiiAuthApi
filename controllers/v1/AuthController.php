@@ -30,38 +30,17 @@ class AuthController extends Controller
      * Register a new user
      * 
      */
-
-    public function actionCreate()
+    public function actionRegister()
     {
         $model = new RegisterForm();
-
-        $model->attributes = Yii::$app->request->post();
-        // When user submits the form, the data will be validated
-
-        // If the data is not valid, the server will return a 400 status code
-        if (!$model->validate()) {
-            throw new HttpException(400, "Invalid data provided");
+        $register = null;
+        if (!($model->load(Yii::$app->request->post(), '') && $register = $model->register())) {
+            return $model->getFirstErrors();
         }
 
-        // If the user already exists, the server will return a 409 status code
-        if (User::getUser($model->email)) {
-            throw new HttpException(409, "User already exists");
-        }
-
-        $userModel = new User();
-        $userModel->load(["User" => Yii::$app->request->post()]);
-        $userModel->password = Yii::$app->getSecurity()->generatePasswordHash($model->password);
-
-        // If the user is not successfully registered, return a 400 status code
-        if (!$userModel->save()) {
-            throw new HttpException(400, "Failed to register user");
-        }
-
-        // If the user is successfully registered, return the user id
         $data = [
-            "id" => $userModel->uuid,
+            "uuid" => $register,
         ];
-
         return $this->asJson($data);
     }
 
@@ -74,7 +53,7 @@ class AuthController extends Controller
     public function actionLogin()
     {
         $model = new LoginForm();
-        if (!($model->load(Yii::$app->request->post(), '') && $model->login())) {
+        if ($model->load(Yii::$app->request->post(), '') && $model->login()) {
             return $model->getFirstErrors();
         }
         $data = [
