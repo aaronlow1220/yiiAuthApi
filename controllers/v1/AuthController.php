@@ -52,7 +52,7 @@ class AuthController extends Controller
      */
     public function actionLogin()
     {
-        $model = new User();
+        $model = new User(['scenario' => User::SCENARIO_Login]);
         $login = null;
         if (!($model->load(Yii::$app->request->post(), '') && $login = $model->login())) {
             return $model->getFirstErrors();
