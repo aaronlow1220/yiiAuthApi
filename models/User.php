@@ -7,6 +7,8 @@ use yii\web\IdentityInterface;
 
 class User extends ActiveRecord implements IdentityInterface
 {
+    const SCENARIO_REGISTER = 'register';
+    const SCENARIO_LOGIN = 'login';
     const STATUS_ACTIVE = 1;
     const STATUS_INACTIVE = 0;
     private $access_token;
@@ -15,11 +17,20 @@ class User extends ActiveRecord implements IdentityInterface
     public function rules()
     {
         return [
-            [['username', 'email', 'password', 'confirmPassword'], 'required'],
+            [['email', 'password'], 'required'],
             ['email', 'email'],
-            ['email', 'unique'],
-            ['confirmPassword', 'compare', 'compareAttribute' => 'password'],
+            ['username', 'required', 'on' => self::SCENARIO_REGISTER],
+            ['email', 'unique', 'on' => self::SCENARIO_REGISTER],
+            ['confirmPassword', 'compare', 'compareAttribute' => 'password', 'on' => self::SCENARIO_REGISTER],
         ];
+    }
+
+    public function scenarios()
+    {
+        $scenarios = parent::scenarios();
+        $scenarios[self::SCENARIO_REGISTER] = ['username', 'email', 'password', 'confirmPassword'];
+        $scenarios[self::SCENARIO_LOGIN] = ['email', 'password'];
+        return $scenarios;
     }
 
     public static function tableName()
@@ -76,13 +87,13 @@ class User extends ActiveRecord implements IdentityInterface
     public function beforeSave($insert)
     {
         if (parent::beforeSave($insert)) {
-            if ($this->isNewRecord) {
-                $this->auth_key = Yii::$app->security->generateRandomString();
-                $this->password = Yii::$app->getSecurity()->generatePasswordHash($this->password);
-            }
-            return true;
+            return false;
         }
-        return false;
+        if ($this->isNewRecord) {
+            $this->auth_key = Yii::$app->security->generateRandomString();
+            $this->password = Yii::$app->getSecurity()->generatePasswordHash($this->password);
+        }
+        return true;
     }
 
     // Auth

@@ -32,7 +32,7 @@ class AuthController extends Controller
      */
     public function actionRegister()
     {
-        $model = new User();
+        $model = new User(['scenario' => User::SCENARIO_REGISTER]);
         $register = null;
         if (!($model->load(Yii::$app->request->post(), '') && $register = $model->register())) {
             return $model->getFirstErrors();
