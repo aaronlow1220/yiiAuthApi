@@ -17,7 +17,7 @@ use \yii\db\BaseActiveRecord;
  *      @OA\Property("username", type="string", description="username", maxLength=255),
  *      @OA\Property("email", type="string", description="email", maxLength=255),
  *      @OA\Property("password", type="string", description="password", maxLength=255),
- *      @OA\Property("status", type="int", description="user status",1: Active 0: Canceled, default=0 ,maxLength=4),
+ *      @OA\Property("status", type="int", description="user status", 1:Active 0:Inactive, default=0 ,maxLength=4),
  *      @OA\Property("auth_key", type="string", description="authentication key", maxLength=255),
  *      @OA\Property("access_token", type="string", description="access token", maxLength=255),
  *      @OA\Property("creaed_at", type="timestamp", description="create timestamp", format="YYYY-MM-DD HH:MM:SS"),
@@ -26,11 +26,46 @@ use \yii\db\BaseActiveRecord;
  */
 class User extends ActiveRecord implements IdentityInterface
 {
+    /**
+     * Scenario for register.
+     * 
+     * @var string
+     */
     const SCENARIO_REGISTER = 'register';
+
+    /**
+     * Scenario for login.
+     * 
+     * @var string
+     */
     const SCENARIO_LOGIN = 'login';
+
+    /**
+     * Status for active account.
+     * 
+     * @var int
+     */
     const STATUS_ACTIVE = 1;
+
+    /**
+     * Status for inactive account.
+     * 
+     * @var int
+     */
     const STATUS_INACTIVE = 0;
+
+    /**
+     * Confirm password of the user when register.
+     * 
+     * @var string
+     */
     public $confirmPassword;
+
+    /**
+     * User object.
+     * 
+     * @var User
+     */
     public $_user;
 
     /**
