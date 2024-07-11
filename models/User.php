@@ -7,21 +7,6 @@ use yii\web\IdentityInterface;
 use \yii\db\BaseActiveRecord;
 
 /**
- * This is the model class for table "users".
- *
- * @property int $id
- * @property string $uuid
- * @property string $username
- * @property string $email
- * @property string $password
- * @property int $status
- * @property string $auth_key
- * @property string $access_token
- * @property string $created_at
- * @property string $updated_at
- */
-
-/**
  * @OA\Schema(
  *      schema="User",
  *      tiltle="User Model",
