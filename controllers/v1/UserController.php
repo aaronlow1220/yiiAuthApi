@@ -152,7 +152,7 @@ class UserController extends Controller
      * )
      * 
      * Get a user info.
-     * 
+     *  
      * @throws HttpException If the user is not found.
      * @return \yii\web\Response Return the user data.
      */
