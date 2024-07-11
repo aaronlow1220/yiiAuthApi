@@ -12,7 +12,7 @@ use \yii\db\BaseActiveRecord;
  *      tiltle="User Model",
  *      description="This model is used to store user data",
  *      required={"email", "password"},
- *      @OA\Property("id", type="integer", description="Auto increment id", #auto increment #primary key, maxLength=11),
+ *      @OA\Property("id", type="int", description="Auto increment id", #auto increment #primary key, maxLength=11),
  *      @OA\Property("uuid", type="string", description="Unique id", maxLength=255),
  *      @OA\Property("username", type="string", description="username", maxLength=255),
  *      @OA\Property("email", type="string", description="email", maxLength=255),
