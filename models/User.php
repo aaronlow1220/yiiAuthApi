@@ -32,7 +32,7 @@ class User extends ActiveRecord implements IdentityInterface
     /**
      * Rules for validation.
      * 
-     * @return array<string> Rules.
+     * @return array<string> Return rules.
      */
     public function rules()
     {
@@ -48,7 +48,7 @@ class User extends ActiveRecord implements IdentityInterface
     /**
      * Scenarios for validation.
      * 
-     * @return array<string> Scenarios.
+     * @return array<string> Return Scenarios.
      */
     public function scenarios()
     {
@@ -61,7 +61,7 @@ class User extends ActiveRecord implements IdentityInterface
     /**
      * Returns table name of users.
      * 
-     * @return string Table name
+     * @return string Return Table name
      */
     public static function tableName()
     {
@@ -105,7 +105,7 @@ class User extends ActiveRecord implements IdentityInterface
     /**
      * Generate new access token for login.
      * 
-     * @return string New access token.
+     * @return string Return new access token.
      */
     public function generateAccessToken()
     {
@@ -116,7 +116,7 @@ class User extends ActiveRecord implements IdentityInterface
     /**
      * Get user's auto increment id.
      * 
-     * @return int User id.
+     * @return int Return user id.
      */
     public function getId()
     {
@@ -126,7 +126,7 @@ class User extends ActiveRecord implements IdentityInterface
     /**
      * Get user's auth key.
      * 
-     * @return string Auth key.
+     * @return string Return auth key.
      */
     public function getAuthKey()
     {
@@ -137,7 +137,7 @@ class User extends ActiveRecord implements IdentityInterface
      * Validate auth key.
      * 
      * @param string $authKey Auth key.
-     * @return bool Whether the auth key is valid.
+     * @return bool Return whether the auth key is valid.
      */
     public function validateAuthKey($authKey)
     {
@@ -148,7 +148,7 @@ class User extends ActiveRecord implements IdentityInterface
      * Validate password.
      * 
      * @param string $password Input password.
-     * @return bool Whether the password is valid.
+     * @return bool Return whether the password is valid.
      */
     public function validatePassword($password)
     {
@@ -170,7 +170,7 @@ class User extends ActiveRecord implements IdentityInterface
      * Actions before saving a record.
      * 
      * @param bool $insert Whether the record is inserted.
-     * @return bool Whether the record is saved.
+     * @return bool Return whether the record is saved.
      */
     public function beforeSave($insert)
     {
@@ -187,7 +187,7 @@ class User extends ActiveRecord implements IdentityInterface
     /**
      * Register user.
      * 
-     * @return bool|string Whether the user is registered.
+     * @return bool|string Return whether the user is registered.
      *                     If the user is registered, return the uuid.
      */
     public function register()
@@ -206,7 +206,7 @@ class User extends ActiveRecord implements IdentityInterface
     /**
      * Login user.
      * 
-     * @return bool | string | array Whether the user is logged in. 
+     * @return bool | string | array Return whether the user is logged in. 
      *                               If the user is logged in, return the access token. 
      *                               If the user is not logged in, return the error message.
      */
@@ -229,7 +229,7 @@ class User extends ActiveRecord implements IdentityInterface
     /**
      * Generate UUID for user.
      * 
-     * @return string UUID.
+     * @return string Return newly generated UUID.
      */
     public static function gen_uuid(): string
     {

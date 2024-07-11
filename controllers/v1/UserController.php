@@ -32,8 +32,8 @@ class UserController extends Controller
     /**
      * Update a user info.
      * 
-     * @throws HttpException
-     * @return \yii\web\Response
+     * @throws HttpException If the user is not found or the data is invalid.
+     * @return \yii\web\Response Return the updated user data.
      */
     public function actionUpdate()
     {
@@ -76,8 +76,8 @@ class UserController extends Controller
     /**
      * Get a user info.
      * 
-     * @throws HttpException
-     * @return \yii\web\Response
+     * @throws HttpException If the user is not found.
+     * @return \yii\web\Response Return the user data.
      */
     public function actionUser()
     {

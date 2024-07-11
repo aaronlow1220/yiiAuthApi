@@ -7,6 +7,7 @@ use yii\web\Controller;
 use app\models\User;
 use yii\filters\auth\HttpBearerAuth;
 use yii\web\HttpException;
+use yii\web\Response;
 
 /**
  * Controller for handling authentication.
@@ -31,7 +32,7 @@ class AuthController extends Controller
     /**
      * Register a user.
      * 
-     * @return array | \yii\web\Response
+     * @return array | Response Return the user data. If the data is invalid, return error messages.
      */
     public function actionRegister()
     {
@@ -50,7 +51,7 @@ class AuthController extends Controller
     /**
      * Login a user.
      * 
-     * @return array | \yii\web\Response
+     * @return array | Response Return the access token. If the data is invalid, return error messages.
      */
     public function actionLogin()
     {
@@ -68,9 +69,9 @@ class AuthController extends Controller
     /**
      * Logout a user.
      * 
-     * @throws HttpException
+     * @throws HttpException If the user is not found.
      * 
-     * @return yii\web\Response
+     * @return Response Return a message. 
      */
     public function actionLogout()
     {
@@ -96,7 +97,7 @@ class AuthController extends Controller
     /**
      * Get access token from authorization header.
      * 
-     * @return string
+     * @return string | null Return the access token. If the access token is not found, return null.
      */
     function GetHeaderToken(): string
     {
