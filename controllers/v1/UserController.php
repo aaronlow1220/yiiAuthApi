@@ -10,14 +10,22 @@ use yii\web\HttpException;
 use app\models\ModifyUserForm;
 
 /**
+ * @OA\Tag(
+ *      name="Auth",
+ *      description="User API"
+ * )
+ * 
  * Controller for handling user action.
  * 
- * @author aaronlow <aaron.low@atelli.ai>
  * version: 1.0
  */
 class UserController extends Controller
 {
 
+    /**
+     * Behaviors.
+     * @return array
+     */
     public function behaviors()
     {
         $behaviors = parent::behaviors();
@@ -30,6 +38,46 @@ class UserController extends Controller
     }
 
     /**
+     * @OA\Put(
+     *      path="/v1/user/{uuid}",
+     *      summary="Update",
+     *      description="Update a user info",
+     *      tags={"User"},
+     *      @OA\Parameter(
+     *          name="uuid",
+     *          in="path",
+     *          description="User UUID",
+     *          required=true,
+     *          @OA\Schema(
+     *              @OA\Property("uuid", type="string")
+     *          )
+     *      )
+     *      @OA\RequestBody(
+     *          description="User info to update",
+     *          required=true,
+     *          @OA\MediaType(
+     *              mediaType="application/json",
+     *              @OA\Schema(
+     *                  @OA\Property("username", type="string", description="username"),
+     *                  @OA\Property("email", type="string", description="email"),
+     *                  @OA\Property("password", type="string", description="password"),
+     *              )
+     *          )
+     *      )
+     *      @OA\Response(
+     *          response=200,
+     *          description="User updated successfully",
+     *          @OA\MediaType(
+     *              mediaType="application/json",
+     *              @OA\Schema(
+     *                  @OA\Property("username", type="string", description="username"),
+     *                  @OA\Property("email", type="string", description="email"),
+     *                  @OA\Property("password", type="string", description="password"),  
+     *              )
+     *          )
+     *      )
+     * )
+     * 
      * Update a user info.
      * 
      * @throws HttpException If the user is not found or the data is invalid.
@@ -74,6 +122,35 @@ class UserController extends Controller
     }
 
     /**
+     * @OA\Get(
+     *      path="/v1/user/{uuid}",
+     *      summary="Get",
+     *      description="Get a user info",
+     *      tags={"User"},
+     *      @OA\Parameter(
+     *          name="uuid",
+     *          in="path",
+     *          description="User UUID",
+     *          required=true,
+     *          @OA\Schema(
+     *              @OA\Property("uuid", type="string")
+     *          )
+     *      )
+     *      @OA\Response(
+     *          response=200,
+     *          description="User info",
+     *          @OA\MediaType(
+     *              mediaType="application/json",
+     *              @OA\Schema(
+     *                  @OA\Property("id", type="int", description="id"),
+     *                  @OA\Property("uuid", type="string", description="uuid"),
+     *                  @OA\Property("username", type="string", description="username"),
+     *                  @OA\Property("email", type="string", description="email")
+     *              )
+     *          )
+     *      )
+     * )
+     * 
      * Get a user info.
      * 
      * @throws HttpException If the user is not found.
@@ -91,10 +168,6 @@ class UserController extends Controller
         // Unset the sensitive data
         unset($user->password, $user->access_token, $user->auth_key, $user->status, $user->created_at, $user->updated_at);
 
-        $data = [
-            "data" => $user,
-        ];
-
-        return $this->asJson($data);
+        return $this->asJson($user);
     }
 }
