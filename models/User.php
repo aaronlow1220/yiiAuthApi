@@ -20,6 +20,25 @@ use \yii\db\BaseActiveRecord;
  * @property string $created_at
  * @property string $updated_at
  */
+
+/**
+ * @OA\Schema(
+ *      schema="User",
+ *      tiltle="User Model",
+ *      description="This model is used to store user data",
+ *      required={"email", "password"},
+ *      @OA\Property("id", type="integer", description="Auto increment id", #auto increment #primary key, maxLength=11),
+ *      @OA\Property("uuid", type="string", description="Unique id", maxLength=255),
+ *      @OA\Property("username", type="string", description="username", maxLength=255),
+ *      @OA\Property("email", type="string", description="email", maxLength=255),
+ *      @OA\Property("password", type="string", description="password", maxLength=255),
+ *      @OA\Property("status", type="smallint", description="user status",1: Active 0: Canceled, default=0 ,maxLength=4),
+ *      @OA\Property("auth_key", type="string", description="authentication key", maxLength=255),
+ *      @OA\Property("access_token", type="string", description="access token", maxLength=255),
+ *      @OA\Property("creaed_at", type="timestamp", description="create timestamp", format="YYYY-MM-DD HH:MM:SS"),
+ *      @OA\Property("updated_at", type="timestamp", description="update timestamp", format="YYYY-MM-DD HH:MM:SS"),
+ * )
+ */
 class User extends ActiveRecord implements IdentityInterface
 {
     const SCENARIO_REGISTER = 'register';
