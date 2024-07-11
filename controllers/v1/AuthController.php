@@ -22,6 +22,11 @@ use yii\web\Response;
 class AuthController extends Controller
 {
 
+    /**
+     * Behaviors for the controller.
+     * 
+     * @return array Return behaviors.
+     */
     public function behaviors()
     {
         $behaviors = parent::behaviors();
