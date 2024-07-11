@@ -91,15 +91,4 @@ class UserController extends Controller
 
         return $this->asJson($data);
     }
-
-    function GetHeaderToken(): string
-    {
-        $header = Yii::$app->request->headers->get('Authorization');
-        if ($header == null) {
-            return null;
-        }
-        $pattern = '/Bearer\s(\S+)/';
-        preg_match($pattern, $header, $matches);
-        return $matches[1];
-    }
 }
