@@ -4,7 +4,22 @@ namespace app\models;
 use Yii;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
+use \yii\db\BaseActiveRecord;
 
+/**
+ * This is the model class for table "users".
+ *
+ * @property int $id
+ * @property string $uuid
+ * @property string $username
+ * @property string $email
+ * @property string $password
+ * @property int $status
+ * @property string $auth_key
+ * @property string $access_token
+ * @property string $created_at
+ * @property string $updated_at
+ */
 class User extends ActiveRecord implements IdentityInterface
 {
     const SCENARIO_REGISTER = 'register';
@@ -14,6 +29,11 @@ class User extends ActiveRecord implements IdentityInterface
     public $confirmPassword;
     public $_user;
 
+    /**
+     * Rules for validation.
+     * 
+     * @return array<string> Rules.
+     */
     public function rules()
     {
         return [
@@ -25,6 +45,11 @@ class User extends ActiveRecord implements IdentityInterface
         ];
     }
 
+    /**
+     * Scenarios for validation.
+     * 
+     * @return array<string> Scenarios.
+     */
     public function scenarios()
     {
         $scenarios = parent::scenarios();
@@ -33,57 +58,120 @@ class User extends ActiveRecord implements IdentityInterface
         return $scenarios;
     }
 
+    /**
+     * Returns table name of users.
+     * 
+     * @return string Table name
+     */
     public static function tableName()
     {
         return 'users';
     }
 
+    /**
+     * Get user by auto increment id.
+     * 
+     * @param int $id User auto increment id.
+     * @return BaseActiveRecord Return user object with the id.
+     */
     public static function findIdentity($id)
     {
         return static::findOne($id);
     }
 
+    /**
+     * Get user by uuid.
+     * 
+     * @param string $uuid User uuid.
+     * @return BaseActiveRecord Return user object with the uuid.
+     */
     public static function findIdentityByUUID($uuid)
     {
         return static::findOne(["uuid" => $uuid]);
     }
 
+    /**
+     * Get user by access token.
+     * 
+     * @param string $token Access token.
+     * @param string|null $type
+     * @return BaseActiveRecord Return user object with the access token.
+     */
     public static function findIdentityByAccessToken($token, $type = null)
     {
         return static::findOne(['access_token' => $token]);
     }
 
+    /**
+     * Generate new access token for login.
+     * 
+     * @return string New access token.
+     */
     public function generateAccessToken()
     {
         $this->access_token = Yii::$app->security->generateRandomString();
         return $this->access_token;
     }
 
+    /**
+     * Get user's auto increment id.
+     * 
+     * @return int User id.
+     */
     public function getId()
     {
         return $this->id;
     }
 
+    /**
+     * Get user's auth key.
+     * 
+     * @return string Auth key.
+     */
     public function getAuthKey()
     {
         return $this->auth_key;
     }
 
+    /**
+     * Validate auth key.
+     * 
+     * @param string $authKey Auth key.
+     * @return bool Whether the auth key is valid.
+     */
     public function validateAuthKey($authKey)
     {
         return $this->getAuthKey() === $authKey;
     }
 
+    /**
+     * Validate password.
+     * 
+     * @param string $password Input password.
+     * @return bool Whether the password is valid.
+     */
     public function validatePassword($password)
     {
         return Yii::$app->security->validatePassword($password, $this->password);
     }
 
+    /**
+     * Get user by email.
+     * 
+     * @param string $email User email.
+     * @return BaseActiveRecord Return user object with the email.
+     */
     public static function getUser($email)
     {
         return static::findOne(['email' => $email]);
     }
 
+    /**
+     * Actions before saving a record.
+     * 
+     * @param bool $insert Whether the record is inserted.
+     * @return bool Whether the record is saved.
+     */
     public function beforeSave($insert)
     {
         if (!parent::beforeSave($insert)) {
@@ -96,7 +184,12 @@ class User extends ActiveRecord implements IdentityInterface
         return true;
     }
 
-    // Auth
+    /**
+     * Register user.
+     * 
+     * @return bool|string Whether the user is registered.
+     *                     If the user is registered, return the uuid.
+     */
     public function register()
     {
         $uuid = static::gen_uuid();
@@ -110,6 +203,13 @@ class User extends ActiveRecord implements IdentityInterface
         return $uuid;
     }
 
+    /**
+     * Login user.
+     * 
+     * @return bool | string | array Whether the user is logged in. 
+     *                               If the user is logged in, return the access token. 
+     *                               If the user is not logged in, return the error message.
+     */
     public function login()
     {
         $_user = User::getUser($this->email);
@@ -126,6 +226,11 @@ class User extends ActiveRecord implements IdentityInterface
         return $accessToken;
     }
 
+    /**
+     * Generate UUID for user.
+     * 
+     * @return string UUID.
+     */
     public static function gen_uuid(): string
     {
         return sprintf(
