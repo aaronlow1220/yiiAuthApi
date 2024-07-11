@@ -9,7 +9,7 @@ use yii\filters\auth\HttpBearerAuth;
 use yii\web\HttpException;
 
 /**
- * Controller for handling authentication
+ * Controller for handling authentication.
  * 
  * @author aaronlow <aaron.low@atelli.ai>
  * version: 1.0
@@ -29,7 +29,7 @@ class AuthController extends Controller
     }
 
     /**
-     * Register a user
+     * Register a user.
      * 
      * @return array | \yii\web\Response
      */
@@ -48,7 +48,7 @@ class AuthController extends Controller
     }
 
     /**
-     * Login a user
+     * Login a user.
      * 
      * @return array | \yii\web\Response
      */
@@ -66,7 +66,7 @@ class AuthController extends Controller
     }
 
     /**
-     * Logout a user
+     * Logout a user.
      * 
      * @throws HttpException
      * 
@@ -94,7 +94,7 @@ class AuthController extends Controller
     }
 
     /**
-     * Get access token from authorization header
+     * Get access token from authorization header.
      * 
      * @return string
      */

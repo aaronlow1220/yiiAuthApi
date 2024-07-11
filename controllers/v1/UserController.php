@@ -9,6 +9,12 @@ use yii\filters\auth\HttpBearerAuth;
 use yii\web\HttpException;
 use app\models\ModifyUserForm;
 
+/**
+ * Controller for handling user action.
+ * 
+ * @author aaronlow <aaron.low@atelli.ai>
+ * version: 1.0
+ */
 class UserController extends Controller
 {
 
@@ -24,7 +30,7 @@ class UserController extends Controller
     }
 
     /**
-     * Update a user info
+     * Update a user info.
      * 
      * @throws HttpException
      * @return \yii\web\Response
@@ -68,7 +74,7 @@ class UserController extends Controller
     }
 
     /**
-     * Get a user info
+     * Get a user info.
      * 
      * @throws HttpException
      * @return \yii\web\Response
