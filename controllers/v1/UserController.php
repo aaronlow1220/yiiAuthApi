@@ -17,7 +17,7 @@ use app\models\ModifyUserForm;
  * 
  * Controller for handling user action.
  * 
- * version: 1.0
+ * version: 1.0.0
  */
 class UserController extends Controller
 {
