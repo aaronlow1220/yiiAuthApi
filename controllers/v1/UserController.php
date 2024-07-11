@@ -24,10 +24,10 @@ class UserController extends Controller
     }
 
     /**
-     * @api {put} /v1/user/<uuid> Update User
-     * 
      * Update a user info
      * 
+     * @throws HttpException
+     * @return \yii\web\Response
      */
     public function actionUpdate()
     {
@@ -68,10 +68,10 @@ class UserController extends Controller
     }
 
     /**
-     * @api {get} /v1/user/<uuid>:uuid Get User
-     * 
      * Get a user info
      * 
+     * @throws HttpException
+     * @return \yii\web\Response
      */
     public function actionUser()
     {

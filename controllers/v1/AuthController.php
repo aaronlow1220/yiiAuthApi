@@ -8,6 +8,12 @@ use app\models\User;
 use yii\filters\auth\HttpBearerAuth;
 use yii\web\HttpException;
 
+/**
+ * Controller for handling authentication
+ * 
+ * @author aaronlow <aaron.low@atelli.ai>
+ * version: 1.0
+ */
 class AuthController extends Controller
 {
 
@@ -23,10 +29,9 @@ class AuthController extends Controller
     }
 
     /**
-     * @api {post} /v1/auth/register Register
+     * Register a user
      * 
-     * Register a new user
-     * 
+     * @return array | \yii\web\Response
      */
     public function actionRegister()
     {
@@ -43,10 +48,9 @@ class AuthController extends Controller
     }
 
     /**
-     * @api {post} /v1/auth/login Login
-     * 
      * Login a user
      * 
+     * @return array | \yii\web\Response
      */
     public function actionLogin()
     {
@@ -62,10 +66,11 @@ class AuthController extends Controller
     }
 
     /**
-     * @api {post} /v1/auth/logout Logout
-     * 
      * Logout a user
      * 
+     * @throws HttpException
+     * 
+     * @return yii\web\Response
      */
     public function actionLogout()
     {
@@ -88,6 +93,11 @@ class AuthController extends Controller
 
     }
 
+    /**
+     * Get access token from authorization header
+     * 
+     * @return string
+     */
     function GetHeaderToken(): string
     {
         $header = Yii::$app->request->headers->get('Authorization');
