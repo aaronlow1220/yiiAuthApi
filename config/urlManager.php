@@ -4,6 +4,7 @@ return [
     'showScriptName' => false,
     'enableStrictParsing' => true,
     'rules' => [ // Auth
+        'GET apidoc' => 'v1/open-api/index',
         [
             'class' => 'yii\rest\UrlRule',
             'controller' => 'v1/auth',

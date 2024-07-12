@@ -8,6 +8,7 @@ use app\models\User;
 use yii\filters\auth\HttpBearerAuth;
 use yii\web\HttpException;
 use yii\web\Response;
+use OpenApi\Annotations as OA;
 
 /**
  * @OA\Tag(
@@ -56,13 +57,16 @@ class AuthController extends Controller
      *                  @OA\Property(property="conformPassword", type="string", description="confirm password")
      *              )
      *          )
-     *      )
+     *      ),
      *      @OA\Response(
      *          response=200,
      *          description="User registered successfully",
      *          @OA\MediaType(
      *              mediaType="application/json",
+     *              @OA\Schema(
      *                  @OA\Property(property="uuid", type="string", description="uuid"),
+     * 
+     *              )
      *          )
      *      )
      * )
@@ -86,10 +90,13 @@ class AuthController extends Controller
     }
 
     /**
+     * Login a user.
+     * 
      * @OA\Post(
      *      path="/v1/auth/login",
      *      summary="login a user",
      *      description="login a user",
+     *      operationId="login",
      *      tags={"Auth"},
      *      @OA\RequestBody(
      *          description="User credentials",
@@ -101,7 +108,7 @@ class AuthController extends Controller
      *                  @OA\Property(property="password", type="string", description="password")
      *              )
      *          )
-     *      )
+     *      ),
      *      @OA\Response(
      *          response=200,
      *          description="User logged in successfully",
@@ -111,8 +118,6 @@ class AuthController extends Controller
      *          )
      *      )
      * )
-     * 
-     * Login a user.
      * 
      * @return array | Response Return the access token. If the data is invalid, return error messages.
      */

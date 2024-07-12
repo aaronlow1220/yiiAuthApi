@@ -49,30 +49,30 @@ class UserController extends Controller
      *          description="User UUID",
      *          required=true,
      *          @OA\Schema(
-     *              @OA\Property("uuid", type="string")
+     *              @OA\Property(property="uuid", type="string")
      *          )
-     *      )
+     *      ),
      *      @OA\RequestBody(
      *          description="User info to update",
      *          required=true,
      *          @OA\MediaType(
      *              mediaType="application/json",
      *              @OA\Schema(
-     *                  @OA\Property("username", type="string", description="username"),
-     *                  @OA\Property("email", type="string", description="email"),
-     *                  @OA\Property("password", type="string", description="password"),
+     *                  @OA\Property(property="username", type="string", description="username"),
+     *                  @OA\Property(property="email", type="string", description="email"),
+     *                  @OA\Property(property="password", type="string", description="password"),
      *              )
      *          )
-     *      )
+     *      ),
      *      @OA\Response(
      *          response=200,
      *          description="User updated successfully",
      *          @OA\MediaType(
      *              mediaType="application/json",
      *              @OA\Schema(
-     *                  @OA\Property("username", type="string", description="username"),
-     *                  @OA\Property("email", type="string", description="email"),
-     *                  @OA\Property("password", type="string", description="password"),  
+     *                  @OA\Property(property="username", type="string", description="username"),
+     *                  @OA\Property(property="email", type="string", description="email"),
+     *                  @OA\Property(property="password", type="string", description="password"),  
      *              )
      *          )
      *      )
@@ -133,19 +133,19 @@ class UserController extends Controller
      *          description="User UUID",
      *          required=true,
      *          @OA\Schema(
-     *              @OA\Property("uuid", type="string")
+     *              @OA\Property(property="uuid", type="string")
      *          )
-     *      )
+     *      ),
      *      @OA\Response(
      *          response=200,
      *          description="User info",
      *          @OA\MediaType(
      *              mediaType="application/json",
      *              @OA\Schema(
-     *                  @OA\Property("id", type="int", description="id"),
-     *                  @OA\Property("uuid", type="string", description="uuid"),
-     *                  @OA\Property("username", type="string", description="username"),
-     *                  @OA\Property("email", type="string", description="email")
+     *                  @OA\Property(property="id", type="int", description="id"),
+     *                  @OA\Property(property="uuid", type="string", description="uuid"),
+     *                  @OA\Property(property="username", type="string", description="username"),
+     *                  @OA\Property(property="email", type="string", description="email")
      *              )
      *          )
      *      )
