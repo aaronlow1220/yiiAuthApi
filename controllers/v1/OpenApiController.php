@@ -8,7 +8,7 @@ use yii\web\Response;
 /**
  * @OA\Info(
  *         version="1.0.0",
- *         title="APIv1",
+ *         title="User Authentication API",
  *         description="APIs document of v1 that based on Swagger OpenAPI",
  *     ),
  */
