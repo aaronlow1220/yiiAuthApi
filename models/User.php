@@ -9,19 +9,19 @@ use \yii\db\BaseActiveRecord;
 /**
  * @OA\Schema(
  *      schema="User",
- *      tiltle="User Model",
+ *      title="User Model",
  *      description="This model is used to store user data",
  *      required={"email", "password"},
- *      @OA\Property("id", type="int", description="Auto increment id", #auto increment #primary key, maxLength=11),
- *      @OA\Property("uuid", type="string", description="Unique id", maxLength=255),
- *      @OA\Property("username", type="string", description="username", maxLength=255),
- *      @OA\Property("email", type="string", description="email", maxLength=255),
- *      @OA\Property("password", type="string", description="password", maxLength=255),
- *      @OA\Property("status", type="int", description="user status", 1:Active 0:Inactive, default=0 ,maxLength=4),
- *      @OA\Property("auth_key", type="string", description="authentication key", maxLength=255),
- *      @OA\Property("access_token", type="string", description="access token", maxLength=255),
- *      @OA\Property("creaed_at", type="timestamp", description="create timestamp", format="YYYY-MM-DD HH:MM:SS"),
- *      @OA\Property("updated_at", type="timestamp", description="update timestamp", format="YYYY-MM-DD HH:MM:SS"),
+ *      @OA\Property(property="id", type="int", description="Auto increment id #auto increment #primary key", maxLength=11),
+ *      @OA\Property(property="uuid", type="string", description="Unique id", maxLength=255),
+ *      @OA\Property(property="username", type="string", description="username", maxLength=255),
+ *      @OA\Property(property="email", type="string", description="email", maxLength=255),
+ *      @OA\Property(property="password", type="string", description="password", maxLength=255),
+ *      @OA\Property(property="status", type="int", description="user status 1:Active 0:Inactive", default=0 ,maxLength=4),
+ *      @OA\Property(property="auth_key", type="string", description="authentication key", maxLength=255),
+ *      @OA\Property(property="access_token", type="string", description="access token", maxLength=255),
+ *      @OA\Property(property="created_at", type="string", description="create timestamp", format="date-time"),
+ *      @OA\Property(property="updated_at", type="string", description="update timestamp", format="date-time"),
  * )
  */
 class User extends ActiveRecord implements IdentityInterface

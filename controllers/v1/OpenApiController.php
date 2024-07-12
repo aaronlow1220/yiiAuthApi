@@ -15,7 +15,8 @@ use yii\web\Response;
 class OpenApiController extends Controller{
     public function actionIndex(){
         $controllersPath = Yii::getAlias('@app/controllers/v1/');
-        $openapi = \OpenApi\Generator::scan([$controllersPath]);
+        $modelPath = Yii::getAlias('@app/models/');
+        $openapi = \OpenApi\Generator::scan([$controllersPath, $modelPath]);
 
         $content = $openapi->toJson();
         $this->response->format = Response::FORMAT_JSON;
