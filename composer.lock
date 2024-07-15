@@ -4,8 +4,58 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "28baae81306c956bc21acc3630edf2f9",
+    "content-hash": "b8585fcdcd48090118e3c05c9a5e6f64",
     "packages": [
+        {
+            "name": "atellitech/utils-yii2",
+            "version": "1.2.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/AtelliTech/utils-yii2.git",
+                "reference": "4d00db374035c55d7fc537d2f7ef63b40b66373c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/AtelliTech/utils-yii2/zipball/4d00db374035c55d7fc537d2f7ef63b40b66373c",
+                "reference": "4d00db374035c55d7fc537d2f7ef63b40b66373c",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.0",
+                "yiisoft/yii2": "^2.0",
+                "zircote/swagger-php": "^4.6"
+            },
+            "require-dev": {
+                "phpstan/phpstan": "^1.9"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "AtelliTech\\Yii2\\Utils\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Eric Huang",
+                    "email": "eric.huang@atelli.ai"
+                }
+            ],
+            "description": "Utilities for Yii2",
+            "homepage": "https://github.com/AtelliTech/utils-yii2",
+            "keywords": [
+                "utilities",
+                "yii2"
+            ],
+            "support": {
+                "issues": "https://github.com/AtelliTech/utils-yii2/issues",
+                "source": "https://github.com/AtelliTech/utils-yii2/tree/1.2.5"
+            },
+            "time": "2024-04-22T19:31:04+00:00"
+        },
         {
             "name": "bower-asset/bootstrap",
             "version": "v5.2.3",
