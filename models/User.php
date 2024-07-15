@@ -74,7 +74,7 @@ class User extends ActiveRecord implements IdentityInterface
      * 
      * @return array<int, mixed> Return behaviors.
      */
-    public static function behaviors(){
+    public function behaviors(){
         return [
             TimestampBehavior::class,
         ];
