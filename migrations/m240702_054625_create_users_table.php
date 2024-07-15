@@ -24,8 +24,6 @@ class m240702_054625_create_users_table extends Migration
             "access_token" => $this->string(255),
             "created_at" => $this->integer(10)->unsigned()->notNull()->comment('unixtime'),
             "updated_at" => $this->integer(10)->unsigned()->notNull()->comment('unixtime'),
-            "created_by" => $this->bigInteger(20)->unsigned()->notNull()->comment('ref:users.id'),
-            "updated_by" => $this->bigInteger(20)->unsigned()->notNull()->comment('ref:users.id'),
         ]);
     }
 
