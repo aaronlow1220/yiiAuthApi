@@ -33,4 +33,4 @@ tests/_support/_generated
 /.vagrant
 
 # env
-./env
+/.env
