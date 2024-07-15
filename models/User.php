@@ -83,7 +83,7 @@ class User extends ActiveRecord implements IdentityInterface
     /**
      * Rules for validation.
      * 
-     * @return array<string> Return rules.
+     * @return array<int, mixed> Return rules.
      */
     public function rules()
     {
