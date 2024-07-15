@@ -2,31 +2,30 @@
 
 namespace v1\controllers;
 
+use OpenApi\Annotations as OA;
 use Yii;
-use yii\web\Controller;
 use app\models\User;
 use yii\filters\auth\HttpBearerAuth;
+use yii\web\Controller;
 use yii\web\HttpException;
 use yii\web\Response;
-use OpenApi\Annotations as OA;
 
 /**
  * @OA\Tag(
  *      name="Auth",
  *      description="Authentication API"
  * )
- * 
+ *
  * Controller for handling authentication.
- * 
+ *
  * version: 1.0.0
  */
 class AuthController extends Controller
 {
-
     /**
      * Behaviors for the controller.
-     * 
-     * @return array Return behaviors.
+     *
+     * @return array return behaviors
      */
     public function behaviors()
     {
@@ -65,15 +64,15 @@ class AuthController extends Controller
      *              mediaType="application/json",
      *              @OA\Schema(
      *                  @OA\Property(property="uuid", type="string", description="uuid"),
-     * 
+     *
      *              )
      *          )
      *      )
      * )
-     * 
+     *
      * Register a user.
-     * 
-     * @return array | Response Return the user data. If the data is invalid, return error messages.
+     *
+     * @return array|Response Return the user data. If the data is invalid, return error messages.
      */
     public function actionRegister()
     {
@@ -84,14 +83,15 @@ class AuthController extends Controller
         }
 
         $data = [
-            "uuid" => $register,
+            'uuid' => $register,
         ];
+
         return $this->asJson($data);
     }
 
     /**
      * Login a user.
-     * 
+     *
      * @OA\Post(
      *      path="/v1/auth/login",
      *      summary="login a user",
@@ -118,8 +118,8 @@ class AuthController extends Controller
      *          )
      *      )
      * )
-     * 
-     * @return array | Response Return the access token. If the data is invalid, return error messages.
+     *
+     * @return array|Response Return the access token. If the data is invalid, return error messages.
      */
     public function actionLogin()
     {
@@ -129,8 +129,9 @@ class AuthController extends Controller
             return $model->getFirstErrors();
         }
         $data = [
-            "access_token" => $login,
+            'access_token' => $login,
         ];
+
         return $this->asJson($data);
     }
 
@@ -149,20 +150,20 @@ class AuthController extends Controller
      *          )
      *      )
      * )
-     * 
+     *
      * Logout a user.
-     * 
-     * @throws HttpException If the user is not found.
-     * 
-     * @return Response Return a message. 
+     *
+     * @throws HttpException if the user is not found
+     *
+     * @return Response return a message
      */
     public function actionLogout()
     {
         $loggedUser = User::findIdentityByAccessToken($this->GetHeaderToken());
 
         // If the user is found, the server will return a 404 status code
-        if ($loggedUser == null) {
-            throw new HttpException(404, "User not found");
+        if (null == $loggedUser) {
+            throw new HttpException(404, 'User not found');
         }
 
         // Set the access token to null
@@ -170,26 +171,26 @@ class AuthController extends Controller
         $loggedUser->update();
 
         $data = [
-            "message" => "Logout successful",
+            'message' => 'Logout successful',
         ];
 
         return $this->asJson($data);
-
     }
 
     /**
      * Get access token from authorization header.
-     * 
-     * @return string | null Return the access token. If the access token is not found, return null.
+     *
+     * @return null|string Return the access token. If the access token is not found, return null.
      */
-    function GetHeaderToken(): string
+    public function GetHeaderToken(): string
     {
         $header = Yii::$app->request->headers->get('Authorization');
-        if ($header == null) {
+        if (null == $header) {
             return null;
         }
         $pattern = '/Bearer\s(\S+)/';
         preg_match($pattern, $header, $matches);
+
         return $matches[1];
     }
 }

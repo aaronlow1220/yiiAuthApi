@@ -1,7 +1,9 @@
 <?php
 
-$params = require __DIR__ . '/params.php';
-$urlManager = require __DIR__ . '/urlManager.php';
+use yii\web\Response;
+
+$params = require __DIR__.'/params.php';
+$urlManager = require __DIR__.'/urlManager.php';
 
 $config = [
     'id' => 'basic',
@@ -21,11 +23,11 @@ $config = [
             'cookieValidationKey' => 'rMyLGf-KEQFr5_cEvOR6ZDcHZNIKzIbo',
             'enableCsrfValidation' => false,
             'parsers' => [
-                "application/json" => "yii\web\JsonParser",
+                'application/json' => 'yii\\web\\JsonParser',
             ],
         ],
         'response' => [
-            'format' => yii\web\Response::FORMAT_JSON,
+            'format' => Response::FORMAT_JSON,
             'charset' => 'UTF-8',
         ],
         'user' => [

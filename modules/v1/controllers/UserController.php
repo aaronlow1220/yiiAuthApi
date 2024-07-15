@@ -3,28 +3,27 @@
 namespace v1\controllers;
 
 use Yii;
-use yii\web\Controller;
 use app\models\User;
 use yii\filters\auth\HttpBearerAuth;
+use yii\web\Controller;
 use yii\web\HttpException;
 use yii\web\Response;
-use app\models\ModifyUserForm;
 
 /**
  * @OA\Tag(
  *      name="Auth",
  *      description="User API"
  * )
- * 
+ *
  * Controller for handling user action.
- * 
+ *
  * version: 1.0.0
  */
 class UserController extends Controller
 {
-
     /**
      * Behaviors.
+     *
      * @return array
      */
     public function behaviors()
@@ -73,21 +72,22 @@ class UserController extends Controller
      *              @OA\Schema(
      *                  @OA\Property(property="username", type="string", description="username"),
      *                  @OA\Property(property="email", type="string", description="email"),
-     *                  @OA\Property(property="password", type="string", description="password"),  
+     *                  @OA\Property(property="password", type="string", description="password"),
      *              )
      *          )
      *      )
      * )
-     * 
+     *
      * Update a user info.
-     * 
-     * @throws HttpException If the user is not found or the data is invalid.
-     * @return array | Response Return the user data. If the data is invalid, return error messages.
+     *
+     * @throws HttpException if the user is not found or the data is invalid
+     * @return array|Response Return the user data. If the data is invalid, return error messages.
      */
-    public function actionUpdate(){
+    public function actionUpdate()
+    {
         $model = new User(['scenario' => User::SCENARIO_UPDATE]);
         $update = null;
-        if (!($model->load(Yii::$app->request->post(), '') && $update = $model->updateUser(Yii::$app->request->get("uuid")))) {
+        if (!($model->load(Yii::$app->request->post(), '') && $update = $model->updateUser(Yii::$app->request->get('uuid')))) {
             return $model->getFirstErrors();
         }
 
@@ -123,20 +123,20 @@ class UserController extends Controller
      *          )
      *      )
      * )
-     * 
+     *
      * Get a user info.
-     *  
-     * @throws HttpException If the user is not found.
-     * @return \yii\web\Response Return the user data.
+     *
+     * @throws HttpException if the user is not found
+     * @return Response return the user data
      */
     public function actionUser()
     {
         // Find the user by the uuid
-        $user = User::findIdentityByUUID(Yii::$app->request->get("uuid"));
+        $user = User::findIdentityByUUID(Yii::$app->request->get('uuid'));
 
         // If the user is not found, the server will return a 404 status code
-        if ($user == null) {
-            throw new HttpException(404, "User not found");
+        if (null == $user) {
+            throw new HttpException(404, 'User not found');
         }
         // Unset the sensitive data
         unset($user->password, $user->access_token, $user->auth_key, $user->status, $user->created_at, $user->updated_at);

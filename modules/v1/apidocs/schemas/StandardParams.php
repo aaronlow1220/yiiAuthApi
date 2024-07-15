@@ -13,8 +13,7 @@ namespace v1\apidocs\schemas;
  *   @OA\Property(property="fields", type="string", description="Select specific fields, using comma be a seperator")
  * )
  */
-class StandardParams
-{}
+class StandardParams {}
 
 /**
  * @OA\Schema(
@@ -27,5 +26,4 @@ class StandardParams
  *   @OA\Property(property="totalCount", type="integer", description="Total rows")
  * )
  */
-class Pagination
-{}
+class Pagination {}

@@ -8,7 +8,7 @@ namespace app\modules\v1;
 class Module extends \yii\base\Module
 {
     /**
-     * {@inherit}
+     * {@inherit}.
      *
      * @return void
      */

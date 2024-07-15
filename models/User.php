@@ -1,11 +1,12 @@
 <?php
+
 namespace app\models;
 
 use Yii;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
+use yii\db\BaseActiveRecord;
 use yii\web\IdentityInterface;
-use \yii\db\BaseActiveRecord;
 
 /**
  * @OA\Schema(
@@ -29,57 +30,57 @@ class User extends ActiveRecord implements IdentityInterface
 {
     /**
      * Scenario for register.
-     * 
+     *
      * @var string
      */
-    const SCENARIO_REGISTER = 'register';
+    public const SCENARIO_REGISTER = 'register';
 
     /**
      * Scenario for login.
-     * 
+     *
      * @var string
      */
-    const SCENARIO_LOGIN = 'login';
+    public const SCENARIO_LOGIN = 'login';
 
     /**
      * Scenario for update.
-     * 
+     *
      * @var string
      */
-    const SCENARIO_UPDATE = 'update';
+    public const SCENARIO_UPDATE = 'update';
 
     /**
      * Status for active account.
-     * 
+     *
      * @var int
      */
-    const STATUS_ACTIVE = 1;
+    public const STATUS_ACTIVE = 1;
 
     /**
      * Status for inactive account.
-     * 
+     *
      * @var int
      */
-    const STATUS_INACTIVE = 0;
+    public const STATUS_INACTIVE = 0;
 
     /**
      * Confirm password of the user when register.
-     * 
+     *
      * @var string
      */
     public $confirmPassword;
 
     /**
      * User object.
-     * 
+     *
      * @var User
      */
     public $_user;
 
     /**
      * Behaviors for the model.
-     * 
-     * @return array<int, mixed> Return behaviors.
+     *
+     * @return array<int, mixed> return behaviors
      */
     public function behaviors()
     {
@@ -90,8 +91,8 @@ class User extends ActiveRecord implements IdentityInterface
 
     /**
      * Rules for validation.
-     * 
-     * @return array<int, mixed> Return rules.
+     *
+     * @return array<int, mixed> return rules
      */
     public function rules()
     {
@@ -105,8 +106,8 @@ class User extends ActiveRecord implements IdentityInterface
 
     /**
      * Scenarios for validation.
-     * 
-     * @return array<string> Return Scenarios.
+     *
+     * @return array<string> return Scenarios
      */
     public function scenarios()
     {
@@ -114,12 +115,13 @@ class User extends ActiveRecord implements IdentityInterface
         $scenarios[self::SCENARIO_REGISTER] = ['username', 'email', 'password', 'confirmPassword'];
         $scenarios[self::SCENARIO_LOGIN] = ['email', 'password'];
         $scenarios[self::SCENARIO_UPDATE] = ['username', 'email', 'password'];
+
         return $scenarios;
     }
 
     /**
      * Returns table name of users.
-     * 
+     *
      * @return string Return Table name
      */
     public static function tableName()
@@ -129,9 +131,9 @@ class User extends ActiveRecord implements IdentityInterface
 
     /**
      * Get user by auto increment id.
-     * 
-     * @param int $id User auto increment id.
-     * @return BaseActiveRecord Return user object with the id.
+     *
+     * @param int $id user auto increment id
+     * @return BaseActiveRecord return user object with the id
      */
     public static function findIdentity($id)
     {
@@ -140,21 +142,21 @@ class User extends ActiveRecord implements IdentityInterface
 
     /**
      * Get user by uuid.
-     * 
-     * @param string $uuid User uuid.
-     * @return BaseActiveRecord Return user object with the uuid.
+     *
+     * @param string $uuid user uuid
+     * @return BaseActiveRecord return user object with the uuid
      */
     public static function findIdentityByUUID($uuid)
     {
-        return static::findOne(["uuid" => $uuid]);
+        return static::findOne(['uuid' => $uuid]);
     }
 
     /**
      * Get user by access token.
-     * 
-     * @param string $token Access token.
-     * @param string|null $type
-     * @return BaseActiveRecord Return user object with the access token.
+     *
+     * @param string $token access token
+     * @param null|string $type
+     * @return BaseActiveRecord return user object with the access token
      */
     public static function findIdentityByAccessToken($token, $type = null)
     {
@@ -163,19 +165,20 @@ class User extends ActiveRecord implements IdentityInterface
 
     /**
      * Generate new access token for login.
-     * 
-     * @return string Return new access token.
+     *
+     * @return string return new access token
      */
     public function generateAccessToken()
     {
         $this->access_token = Yii::$app->security->generateRandomString();
+
         return $this->access_token;
     }
 
     /**
      * Get user's auto increment id.
-     * 
-     * @return int Return user id.
+     *
+     * @return int return user id
      */
     public function getId()
     {
@@ -184,8 +187,8 @@ class User extends ActiveRecord implements IdentityInterface
 
     /**
      * Get user's auth key.
-     * 
-     * @return string Return auth key.
+     *
+     * @return string return auth key
      */
     public function getAuthKey()
     {
@@ -194,9 +197,9 @@ class User extends ActiveRecord implements IdentityInterface
 
     /**
      * Validate auth key.
-     * 
-     * @param string $authKey Auth key.
-     * @return bool Return whether the auth key is valid.
+     *
+     * @param string $authKey auth key
+     * @return bool return whether the auth key is valid
      */
     public function validateAuthKey($authKey)
     {
@@ -205,9 +208,9 @@ class User extends ActiveRecord implements IdentityInterface
 
     /**
      * Validate password.
-     * 
-     * @param string $password Input password.
-     * @return bool Return whether the password is valid.
+     *
+     * @param string $password input password
+     * @return bool return whether the password is valid
      */
     public function validatePassword($password)
     {
@@ -216,9 +219,9 @@ class User extends ActiveRecord implements IdentityInterface
 
     /**
      * Get user by email.
-     * 
-     * @param string $email User email.
-     * @return BaseActiveRecord Return user object with the email.
+     *
+     * @param string $email user email
+     * @return BaseActiveRecord return user object with the email
      */
     public static function getUser($email)
     {
@@ -227,9 +230,9 @@ class User extends ActiveRecord implements IdentityInterface
 
     /**
      * Actions before saving a record.
-     * 
-     * @param bool $insert Whether the record is inserted.
-     * @return bool Return whether the record is saved.
+     *
+     * @param bool $insert whether the record is inserted
+     * @return bool return whether the record is saved
      */
     public function beforeSave($insert)
     {
@@ -240,12 +243,13 @@ class User extends ActiveRecord implements IdentityInterface
             $this->auth_key = Yii::$app->security->generateRandomString();
             $this->password = Yii::$app->getSecurity()->generatePasswordHash($this->password);
         }
+
         return true;
     }
 
     /**
      * Register user.
-     * 
+     *
      * @return bool|string Return whether the user is registered.
      *                     If the user is registered, return the uuid.
      */
@@ -264,10 +268,10 @@ class User extends ActiveRecord implements IdentityInterface
 
     /**
      * Login user.
-     * 
-     * @return bool | string | array Return whether the user is logged in. 
-     *                               If the user is logged in, return the access token. 
-     *                               If the user is not logged in, return the error message.
+     *
+     * @return array|bool|string Return whether the user is logged in.
+     *                           If the user is logged in, return the access token.
+     *                           If the user is not logged in, return the error message.
      */
     public function login()
     {
@@ -282,6 +286,7 @@ class User extends ActiveRecord implements IdentityInterface
         if (!$_user->update()) {
             return $_user->getErrors();
         }
+
         return $accessToken;
     }
 
@@ -294,36 +299,37 @@ class User extends ActiveRecord implements IdentityInterface
 
         foreach ($this->dirtyAttributes as $name => $value) {
             // If the name is password, the value will be hashed
-            if ($name == 'password') {
+            if ('password' == $name) {
                 $value = Yii::$app->getSecurity()->generatePasswordHash($value);
             }
-            $_user->$name = $value;
+            $_user->{$name} = $value;
             $_user->update();
             $data[$name] = $value;
         }
 
         $_user = self::findIdentityByUUID($uuid);
-        $data["updatedAt"] = $_user->updated_at;
+        $data['updatedAt'] = $_user->updated_at;
+
         return $data;
     }
 
     /**
      * Generate UUID for user.
-     * 
-     * @return string Return newly generated UUID.
+     *
+     * @return string return newly generated UUID
      */
     public static function gen_uuid(): string
     {
         return sprintf(
             '%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
-            mt_rand(0, 0xffff),
-            mt_rand(0, 0xffff),
-            mt_rand(0, 0xffff),
-            mt_rand(0, 0x0fff) | 0x4000,
-            mt_rand(0, 0x3fff) | 0x8000,
-            mt_rand(0, 0xffff),
-            mt_rand(0, 0xffff),
-            mt_rand(0, 0xffff)
+            mt_rand(0, 0xFFFF),
+            mt_rand(0, 0xFFFF),
+            mt_rand(0, 0xFFFF),
+            mt_rand(0, 0x0FFF) | 0x4000,
+            mt_rand(0, 0x3FFF) | 0x8000,
+            mt_rand(0, 0xFFFF),
+            mt_rand(0, 0xFFFF),
+            mt_rand(0, 0xFFFF)
         );
     }
 }

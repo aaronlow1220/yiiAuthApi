@@ -5,14 +5,16 @@ namespace v1\components;
 use yii\rest\Serializer;
 
 /**
- * Serializer
+ * Serializer.
  */
 class ApiSerializer extends Serializer
 {
     /**
      * Serializes a pagination into an array.
+     *
      * @param Pagination $pagination
      * @return array<string, array<string, int>> the array representation of the pagination
+     *
      * @see addPaginationHeaders()
      */
     protected function serializePagination($pagination): array
@@ -28,7 +30,7 @@ class ApiSerializer extends Serializer
     }
 
     /**
-     * {@inherit}
+     * {@inherit}.
      *
      * @return array<string[]>
      */
@@ -39,27 +41,29 @@ class ApiSerializer extends Serializer
         $rpFields = $requestParams[$this->fieldsParam] ?? null;
         $rpExpand = $requestParams[$this->expandParam] ?? null;
 
-        if ($rpFields !== null) {
-            if (is_array($rpFields))
+        if (null !== $rpFields) {
+            if (is_array($rpFields)) {
                 $fields = $rpFields;
-            elseif (is_string($rpFields))
+            } elseif (is_string($rpFields)) {
                 $fields = preg_split('/\s*,\s*/', $rpFields, -1, PREG_SPLIT_NO_EMPTY);
-            else
+            } else {
                 $fields = [];
+            }
         }
 
-        if ($rpExpand !== null) {
-            if (is_array($rpExpand))
+        if (null !== $rpExpand) {
+            if (is_array($rpExpand)) {
                 $expand = $rpExpand;
-            elseif (is_string($rpExpand))
+            } elseif (is_string($rpExpand)) {
                 $expand = preg_split('/\s*,\s*/', $rpExpand, -1, PREG_SPLIT_NO_EMPTY);
-            else
+            } else {
                 $expand = [];
+            }
         }
 
         return [
             $fields,
-            $expand
+            $expand,
         ];
     }
 }

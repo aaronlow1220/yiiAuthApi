@@ -24,6 +24,6 @@ return (new Config())
         'phpdoc_add_missing_param_annotation' => ['only_untyped' => false],
         'phpdoc_align' => ['align' => 'left'],
         'single_line_comment_style' => false,
-        'phpdoc_to_comment' => false
+        'phpdoc_to_comment' => false,
     ])
     ->setFinder($finder);

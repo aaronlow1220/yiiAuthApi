@@ -1,6 +1,6 @@
 <?php
 
-$params = require __DIR__ . '/params.php';
+$params = require __DIR__.'/params.php';
 
 $config = [
     'id' => 'basic-console',
@@ -29,7 +29,7 @@ $config = [
             'class' => 'AtelliTech\Yii2\Utils\ApiGeneratorController',
             'db' => 'db',
         ],
-    ]
+    ],
 ];
 
 return $config;

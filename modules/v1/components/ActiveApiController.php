@@ -2,6 +2,7 @@
 
 namespace v1\components;
 
+use yii\filters\Cors;
 use yii\filters\auth\CompositeAuth;
 use yii\filters\auth\HttpBearerAuth;
 use yii\log\Logger;
@@ -10,36 +11,36 @@ use yii\web\IdentityInterface;
 use yii\web\Response;
 
 /**
- * This is a base API controller
+ * This is a base API controller.
  */
 class ActiveApiController extends ActiveController
 {
     /**
-     * @var string $modelClass
+     * @var string
      */
     public $modelClass = 'yii\base\DynamicModel';
 
     /**
-     * @var IdentityInterface $webUser
-     */
-    protected $webUser;
-
-    /**
-     * @var string $user Component id of yii\web\User
-     */
-    protected $user = 'user';
-
-    /**
-     * @var array<string, string> $serializer
+     * @var array<string, string>
      */
     public $serializer = [
         'class' => 'v1\components\ApiSerializer',
         'collectionEnvelope' => '_data',
-        'metaEnvelope' => '_meta'
+        'metaEnvelope' => '_meta',
     ];
 
     /**
-     * init
+     * @var IdentityInterface
+     */
+    protected $webUser;
+
+    /**
+     * @var string Component id of yii\web\User
+     */
+    protected $user = 'user';
+
+    /**
+     * init.
      *
      * @return void
      */
@@ -50,7 +51,7 @@ class ActiveApiController extends ActiveController
     }
 
     /**
-     * behaviors
+     * behaviors.
      *
      * @return array<string, mixed>
      */
@@ -63,7 +64,7 @@ class ActiveApiController extends ActiveController
 
         // add CORS filter
         $behaviors['corsFilter'] = [
-            'class' => \yii\filters\Cors::class,
+            'class' => Cors::class,
         ];
 
         $behaviors['authenticator'] = [
@@ -71,14 +72,14 @@ class ActiveApiController extends ActiveController
             'authMethods' => [
                 HttpBearerAuth::class,
             ],
-            'except' => $this->authExcept()
+            'except' => $this->authExcept(),
         ];
 
         return $behaviors;
     }
 
     /**
-     * auth exception list
+     * auth exception list.
      *
      * @return string[]
      */
@@ -88,7 +89,7 @@ class ActiveApiController extends ActiveController
     }
 
     /**
-     * get request parameters
+     * get request parameters.
      *
      * @return array<string, mixed>
      */
@@ -103,7 +104,7 @@ class ActiveApiController extends ActiveController
     }
 
     /**
-     * log error
+     * log error.
      *
      * @param mixed $message
      * @param string $category
@@ -115,7 +116,7 @@ class ActiveApiController extends ActiveController
     }
 
     /**
-     * log warning
+     * log warning.
      *
      * @param mixed $message
      * @param string $category
@@ -127,7 +128,7 @@ class ActiveApiController extends ActiveController
     }
 
     /**
-     * log info
+     * log info.
      *
      * @param mixed $message
      * @param string $category
@@ -139,7 +140,7 @@ class ActiveApiController extends ActiveController
     }
 
     /**
-     * log trace
+     * log trace.
      *
      * @param mixed $message
      * @param string $category
@@ -151,7 +152,7 @@ class ActiveApiController extends ActiveController
     }
 
     /**
-     * log beginProfile
+     * log beginProfile.
      *
      * @param string $token
      * @param string $category
@@ -163,7 +164,7 @@ class ActiveApiController extends ActiveController
     }
 
     /**
-     * log endProfile
+     * log endProfile.
      *
      * @param string $token
      * @param string $category
@@ -175,7 +176,7 @@ class ActiveApiController extends ActiveController
     }
 
     /**
-     * log
+     * log.
      *
      * @param int $level
      * @param mixed $message
