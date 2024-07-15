@@ -2,6 +2,7 @@
 namespace app\models;
 
 use Yii;
+use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
 use \yii\db\BaseActiveRecord;
@@ -67,6 +68,17 @@ class User extends ActiveRecord implements IdentityInterface
      * @var User
      */
     public $_user;
+
+    /**
+     * Behaviors for the model.
+     * 
+     * @return array<int, mixed> Return behaviors.
+     */
+    public static function behaviors(){
+        return [
+            TimestampBehavior::class,
+        ];
+    }
 
     /**
      * Rules for validation.
