@@ -1,12 +1,18 @@
 <?php
 
-$db = require __DIR__ . '/db.php';
+$params = require __DIR__ . '/params.php';
 
 $config = [
     'id' => 'basic-console',
     'basePath' => dirname(__DIR__),
     'components' => [
-        'db' => $db,
+        'db' => [
+            'class' => 'yii\db\Connection',
+            'dsn' => $params['db']['dsn'],
+            'username'=> $params['db']['username'],
+            'password'=> $params['db']['password'],
+            'charset' => 'utf8mb4',
+        ],
     ],
     'controllerMap'=>[
         'genmodel' => [
