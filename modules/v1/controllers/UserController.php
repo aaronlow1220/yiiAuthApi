@@ -7,6 +7,7 @@ use yii\web\Controller;
 use app\models\User;
 use yii\filters\auth\HttpBearerAuth;
 use yii\web\HttpException;
+use yii\web\Response;
 use app\models\ModifyUserForm;
 
 /**
@@ -81,44 +82,16 @@ class UserController extends Controller
      * Update a user info.
      * 
      * @throws HttpException If the user is not found or the data is invalid.
-     * @return \yii\web\Response Return the updated user data.
+     * @return array | Response Return the user data. If the data is invalid, return error messages.
      */
-    public function actionUpdate()
-    {
-        // Find the user by UUID
-        $user = User::findIdentityByUUID(Yii::$app->request->get("uuid"));
-
-        // If the user is not found, the server will return a 404 status code
-        if ($user == null) {
-            throw new HttpException(404, "User not found");
+    public function actionUpdate(){
+        $model = new User(['scenario' => User::SCENARIO_UPDATE]);
+        $update = null;
+        if (!($model->load(Yii::$app->request->post(), '') && $update = $model->updateUser(Yii::$app->request->get("uuid")))) {
+            return $model->getFirstErrors();
         }
 
-        $model = new ModifyUserForm();
-        $params = Yii::$app->request->getBodyParams();
-        $model->attributes = $params;
-        // When user submits the form, the data will be validated
-
-        // If the data is not valid, the server will return a 400 status code
-        if (!$model->validate()) {
-            throw new HttpException(400, "Invalid data provided");
-        }
-
-        // Update the user data
-        foreach ($params as $name => $value) {
-            // If the name is password, the value will be hashed
-            if ($name == 'password') {
-                $value = Yii::$app->getSecurity()->generatePasswordHash($value);
-            }
-            $user->$name = $value;
-            $user->update();
-            $data[$name] = $value;
-        }
-
-        $user = User::findIdentityByUUID(Yii::$app->request->get("uuid"));
-
-        $data["updatedAt"] = $user->updated_at;
-
-        return $this->asJson($data);
+        return $this->asJson($update);
     }
 
     /**

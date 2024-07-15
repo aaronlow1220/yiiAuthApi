@@ -42,6 +42,13 @@ class User extends ActiveRecord implements IdentityInterface
     const SCENARIO_LOGIN = 'login';
 
     /**
+     * Scenario for update.
+     * 
+     * @var string
+     */
+    const SCENARIO_UPDATE = 'update';
+
+    /**
      * Status for active account.
      * 
      * @var int
@@ -74,7 +81,8 @@ class User extends ActiveRecord implements IdentityInterface
      * 
      * @return array<int, mixed> Return behaviors.
      */
-    public function behaviors(){
+    public function behaviors()
+    {
         return [
             TimestampBehavior::class,
         ];
@@ -88,10 +96,9 @@ class User extends ActiveRecord implements IdentityInterface
     public function rules()
     {
         return [
-            [['email', 'password'], 'required'],
             ['email', 'email'],
             ['username', 'required', 'on' => self::SCENARIO_REGISTER],
-            ['email', 'unique', 'on' => self::SCENARIO_REGISTER],
+            ['email', 'unique', 'on' => [self::SCENARIO_REGISTER, self::SCENARIO_UPDATE]],
             ['confirmPassword', 'compare', 'compareAttribute' => 'password', 'on' => self::SCENARIO_REGISTER],
         ];
     }
@@ -106,6 +113,7 @@ class User extends ActiveRecord implements IdentityInterface
         $scenarios = parent::scenarios();
         $scenarios[self::SCENARIO_REGISTER] = ['username', 'email', 'password', 'confirmPassword'];
         $scenarios[self::SCENARIO_LOGIN] = ['email', 'password'];
+        $scenarios[self::SCENARIO_UPDATE] = ['username', 'email', 'password'];
         return $scenarios;
     }
 
@@ -245,7 +253,7 @@ class User extends ActiveRecord implements IdentityInterface
     {
         $uuid = static::gen_uuid();
         $this->uuid = $uuid;
-        $this->status = User::STATUS_ACTIVE;
+        $this->status = self::STATUS_ACTIVE;
 
         if (!$this->save()) {
             return false;
@@ -263,7 +271,7 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public function login()
     {
-        $_user = User::getUser($this->email);
+        $_user = self::getUser($this->email);
 
         if (!$_user || !$_user->validatePassword($this->password)) {
             return false;
@@ -275,6 +283,28 @@ class User extends ActiveRecord implements IdentityInterface
             return $_user->getErrors();
         }
         return $accessToken;
+    }
+
+    public function updateUser($uuid)
+    {
+        $_user = self::findIdentityByUUID($uuid);
+        if (!$_user) {
+            return false;
+        }
+
+        foreach ($this->dirtyAttributes as $name => $value) {
+            // If the name is password, the value will be hashed
+            if ($name == 'password') {
+                $value = Yii::$app->getSecurity()->generatePasswordHash($value);
+            }
+            $_user->$name = $value;
+            $_user->update();
+            $data[$name] = $value;
+        }
+
+        $_user = self::findIdentityByUUID($uuid);
+        $data["updatedAt"] = $_user->updated_at;
+        return $data;
     }
 
     /**
