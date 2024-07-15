@@ -13,7 +13,7 @@ use \yii\db\BaseActiveRecord;
  *      title="User Model",
  *      description="This model is used to store user data",
  *      required={"email", "password"},
- *      @OA\Property(property="id", type="int", description="Auto increment id #auto increment #primary key", maxLength=11),
+ *      @OA\Property(property="id", type="int", description="Auto increment id #auto increment #primary key", maxLength=20),
  *      @OA\Property(property="uuid", type="string", description="Unique id", maxLength=255),
  *      @OA\Property(property="username", type="string", description="username", maxLength=255),
  *      @OA\Property(property="email", type="string", description="email", maxLength=255),
@@ -21,8 +21,8 @@ use \yii\db\BaseActiveRecord;
  *      @OA\Property(property="status", type="int", description="user status 1:Active 0:Inactive", default=0 ,maxLength=4),
  *      @OA\Property(property="auth_key", type="string", description="authentication key", maxLength=255),
  *      @OA\Property(property="access_token", type="string", description="access token", maxLength=255),
- *      @OA\Property(property="created_at", type="string", description="create timestamp", format="date-time"),
- *      @OA\Property(property="updated_at", type="string", description="update timestamp", format="date-time"),
+ *      @OA\Property(property="created_at", type="int", description="unixtime", maxLength=10),
+ *      @OA\Property(property="updated_at", type="int", description="unixtime", maxLength=10),
  * )
  */
 class User extends ActiveRecord implements IdentityInterface
