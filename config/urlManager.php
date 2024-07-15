@@ -7,9 +7,7 @@ return [
         'GET apidoc' => 'v1/open-api/index',
         [
             'class' => 'yii\rest\UrlRule',
-            'controller' => [
-                'auth' => 'v1/auth',
-            ],
+            'controller' => 'v1/auth',
             'except' => ['index'],
             'pluralize' => false,
             'extraPatterns' => [
@@ -20,10 +18,7 @@ return [
         ],
         [ // User
             'class' => 'yii\rest\UrlRule',
-            'controller' => [
-                'user' => 'v1/user',
-
-            ],
+            'controller' => 'v1/user',
             'except' => ['index'],
             'pluralize' => false,
             'extraPatterns' => [
