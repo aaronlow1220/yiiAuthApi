@@ -39,29 +39,30 @@ class OpenApiSpecController extends Controller
     /**
      * display swagger yaml.
      *
+     * @param Response $response
      * @param string $format default: yaml
      * @return Response|string
      */
-    public function actionIndex(?string $format = null): Response|string
+    public function actionIndex(Response $response, ?string $format = null): Response|string
     {
         $modulePath = Yii::getAlias('@v1');
         $modelPath = Yii::getAlias('@app/models');
         $openapi = Generator::scan([$modulePath, $modelPath]);
         if ('json' == $format) {
             $contents = $openapi->toJson();
-            $this->response->format = Response::FORMAT_JSON;
+            $response->format = Response::FORMAT_JSON;
         } elseif ('yaml' == $format) {
             $contents = $openapi->toYaml();
-            $this->response->headers->set('Content-Type', 'application/x-yaml');
+            $response->headers->set('Content-Type', 'application/x-yaml');
         } else {
             $viewFile = Yii::getAlias('@v1/views/view_apidoc.php');
             $yamlUri = strstr(Url::to(['/apidoc', 'format' => 'yaml'], true), '//');
             $contents = $this->view->renderFile($viewFile, ['yamlUri' => $yamlUri]);
-            $this->response->format = Response::FORMAT_HTML;
+            $response->format = Response::FORMAT_HTML;
         }
 
-        $this->response->content = $contents;
+        $response->content = $contents;
 
-        return $this->response;
+        return $response;
     }
 }

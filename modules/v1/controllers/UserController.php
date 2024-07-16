@@ -24,7 +24,7 @@ class UserController extends Controller
     /**
      * Behaviors.
      *
-     * @return array
+     * @return array<int|string, mixed>
      */
     public function behaviors()
     {
@@ -81,7 +81,7 @@ class UserController extends Controller
      * Update a user info.
      *
      * @throws HttpException if the user is not found or the data is invalid
-     * @return array|Response Return the user data. If the data is invalid, return error messages.
+     * @return array<string>|Response Return the user data. If the data is invalid, return error messages.
      */
     public function actionUpdate()
     {

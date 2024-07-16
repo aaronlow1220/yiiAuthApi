@@ -25,7 +25,7 @@ class AuthController extends Controller
     /**
      * Behaviors for the controller.
      *
-     * @return array return behaviors
+     * @return array<int|string, mixed> return behaviors
      */
     public function behaviors()
     {
@@ -72,7 +72,7 @@ class AuthController extends Controller
      *
      * Register a user.
      *
-     * @return array|Response Return the user data. If the data is invalid, return error messages.
+     * @return array<string>|Response Return the user data. If the data is invalid, return error messages.
      */
     public function actionRegister()
     {
@@ -119,7 +119,7 @@ class AuthController extends Controller
      *      )
      * )
      *
-     * @return array|Response Return the access token. If the data is invalid, return error messages.
+     * @return array<string>|Response Return the access token. If the data is invalid, return error messages.
      */
     public function actionLogin()
     {
@@ -167,7 +167,7 @@ class AuthController extends Controller
         }
 
         // Set the access token to null
-        $loggedUser->access_token = null;
+        $loggedUser['access_token'] = null;
         $loggedUser->update();
 
         $data = [
@@ -180,13 +180,13 @@ class AuthController extends Controller
     /**
      * Get access token from authorization header.
      *
-     * @return null|string Return the access token. If the access token is not found, return null.
+     * @return string Return the access token. If the access token is not found, return null.
      */
     public function GetHeaderToken(): string
     {
         $header = Yii::$app->request->headers->get('Authorization');
         if (null == $header) {
-            return null;
+            return $header;
         }
         $pattern = '/Bearer\s(\S+)/';
         preg_match($pattern, $header, $matches);

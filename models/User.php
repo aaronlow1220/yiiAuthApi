@@ -25,6 +25,7 @@ use yii\web\IdentityInterface;
  *      @OA\Property(property="created_at", type="int", description="unixtime", maxLength=10),
  *      @OA\Property(property="updated_at", type="int", description="unixtime", maxLength=10),
  * )
+ *
  */
 class User extends ActiveRecord implements IdentityInterface
 {
@@ -170,9 +171,9 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public function generateAccessToken()
     {
-        $this->access_token = Yii::$app->security->generateRandomString();
+        $this['access_token'] = Yii::$app->security->generateRandomString();
 
-        return $this->access_token;
+        return $this['access_token'];
     }
 
     /**
@@ -182,7 +183,7 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public function getId()
     {
-        return $this->id;
+        return $this['id'];
     }
 
     /**
@@ -192,7 +193,7 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public function getAuthKey()
     {
-        return $this->auth_key;
+        return $this['auth_key'];
     }
 
     /**
@@ -210,11 +211,12 @@ class User extends ActiveRecord implements IdentityInterface
      * Validate password.
      *
      * @param string $password input password
+     * @param string $hash password hash from database
      * @return bool return whether the password is valid
      */
-    public function validatePassword($password)
+    public function validatePassword($password, $hash)
     {
-        return Yii::$app->security->validatePassword($password, $this->password);
+        return Yii::$app->security->validatePassword($password, $hash);
     }
 
     /**
@@ -240,8 +242,8 @@ class User extends ActiveRecord implements IdentityInterface
             return false;
         }
         if ($this->isNewRecord) {
-            $this->auth_key = Yii::$app->security->generateRandomString();
-            $this->password = Yii::$app->getSecurity()->generatePasswordHash($this->password);
+            $this['auth_key'] = Yii::$app->security->generateRandomString();
+            $this['password'] = Yii::$app->getSecurity()->generatePasswordHash($this['password']);
         }
 
         return true;
@@ -256,8 +258,8 @@ class User extends ActiveRecord implements IdentityInterface
     public function register()
     {
         $uuid = static::gen_uuid();
-        $this->uuid = $uuid;
-        $this->status = self::STATUS_ACTIVE;
+        $this['uuid'] = $uuid;
+        $this['status'] = self::STATUS_ACTIVE;
 
         if (!$this->save()) {
             return false;
@@ -269,20 +271,20 @@ class User extends ActiveRecord implements IdentityInterface
     /**
      * Login user.
      *
-     * @return array|bool|string Return whether the user is logged in.
-     *                           If the user is logged in, return the access token.
-     *                           If the user is not logged in, return the error message.
+     * @return array<string, null>|bool|string Return whether the user is logged in.
+     *                                         If the user is logged in, return the access token.
+     *                                         If the user is not logged in, return the error message.
      */
     public function login()
     {
-        $_user = self::getUser($this->email);
+        $_user = self::getUser($this['email']);
 
-        if (!$_user || !$_user->validatePassword($this->password)) {
+        if (!$_user || !self::validatePassword($this['password'], $_user['password'])) {
             return false;
         }
 
-        $accessToken = $_user->generateAccessToken();
-        $_user->access_token = $accessToken;
+        $accessToken = self::generateAccessToken();
+        $_user['access_token'] = $accessToken;
         if (!$_user->update()) {
             return $_user->getErrors();
         }
@@ -290,6 +292,12 @@ class User extends ActiveRecord implements IdentityInterface
         return $accessToken;
     }
 
+    /**
+     * Update a user.
+     *
+     * @param string $uuid
+     * @return array<string, mixed>|bool
+     */
     public function updateUser($uuid)
     {
         $_user = self::findIdentityByUUID($uuid);
@@ -308,7 +316,7 @@ class User extends ActiveRecord implements IdentityInterface
         }
 
         $_user = self::findIdentityByUUID($uuid);
-        $data['updatedAt'] = $_user->updated_at;
+        $data['updatedAt'] = $_user['updated_at'];
 
         return $data;
     }
