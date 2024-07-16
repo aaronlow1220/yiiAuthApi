@@ -25,6 +25,7 @@ return [
             'extraPatterns' => [
                 'GET <uuid>' => 'user',
                 'PUT <uuid>' => 'update',
+                'POST search'=> 'search',
             ],
         ],
     ],

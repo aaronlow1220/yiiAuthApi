@@ -3,6 +3,7 @@
 use yii\web\Response;
 
 $params = require __DIR__.'/params.php';
+$definitions = require __DIR__.'/container.php';
 $urlManager = require __DIR__.'/urlManager.php';
 
 $config = [
@@ -41,6 +42,7 @@ $config = [
             'charset' => 'utf8mb4',
         ],
         'urlManager' => $urlManager,
+        'container' => &$container,
     ],
 ];
 

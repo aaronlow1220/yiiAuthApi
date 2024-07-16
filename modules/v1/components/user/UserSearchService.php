@@ -9,19 +9,30 @@ class UserSearchService{
 
     public function __construct(private UserRepository $userRepository){}
 
-    public function searchUser(array $criteria): ActiveDataProvider
+    public function searchUser(array $criteria): array
     {
-        $query = $this->userRepository->search($criteria);
-        return new ActiveDataProvider([
-            'query' => $query,
+        $query = $this->userRepository->find();
+
+        if (isset($criteria['username'])) {
+            $query->andFilterWhere(['like', 'username', $criteria['username']]);
+        }
+
+        if (isset($criteria['email'])) {
+            $query->andFilterWhere(['like', 'email', $criteria['email']]);
+        }
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => &$query,
             'pagination' => [
-                'pageSize' => 10,
+                'class' => 'v1\components\Pagination',
+                'params' => $criteria,
             ],
             'sort' => [
-                'defaultOrder' => [
-                    'created_at' => SORT_DESC,
-                ],
+                'enableMultiSort' => true,
+                'params' => $criteria,
             ],
         ]);
+
+        return $dataProvider->getModels();
     }
 }

@@ -2,6 +2,7 @@
 
 namespace v1\controllers;
 
+use v1\components\user\UserSearchService;
 use Yii;
 use app\models\User;
 use yii\filters\auth\HttpBearerAuth;
@@ -21,6 +22,11 @@ use yii\web\Response;
  */
 class UserController extends Controller
 {
+    public function __construct($id, $module, private UserSearchService $userSearchService, $config = [])
+    {
+        parent::__construct($id, $module, $config);
+    }
+
     /**
      * Behaviors.
      *
@@ -142,5 +148,11 @@ class UserController extends Controller
         unset($user->password, $user->access_token, $user->auth_key, $user->status, $user->created_at, $user->updated_at);
 
         return $this->asJson($user);
+    }
+
+    public function actionSearch(){
+        $criteria = Yii::$app->request->bodyParams;
+
+        return $this->userSearchService->searchUser($criteria);
     }
 }
