@@ -7,7 +7,7 @@ use app\models\User;
 use yii\db\ActiveQuery;
 
 /**
- * Repository for accessing User model
+ * Repository for accessing User model.
  */
 class UserRepository extends AbstractRepository
 {
@@ -17,9 +17,9 @@ class UserRepository extends AbstractRepository
     protected string $modelClass = User::class;
 
     /**
-     * Search for users with username and email
-     * 
-     * @param array $criteria
+     * Search for users with username and email.
+     *
+     * @param array<string> $criteria
      * @return ActiveQuery
      */
     public function search(array $criteria): ActiveQuery

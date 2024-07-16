@@ -5,10 +5,24 @@ namespace v1\components\user;
 use app\components\user\UserRepository;
 use yii\data\ActiveDataProvider;
 
-class UserSearchService{
+/**
+ * Service for searching users.
+ */
+class UserSearchService
+{
+    /**
+     * Constructor.
+     *
+     * @param UserRepository $userRepository
+     */
+    public function __construct(private UserRepository $userRepository) {}
 
-    public function __construct(private UserRepository $userRepository){}
-
+    /**
+     * Search for users with username and email.
+     *
+     * @param array<string> $criteria
+     * @return array<string, mixed>
+     */
     public function searchUser(array $criteria): array
     {
         $query = $this->userRepository->search($criteria);

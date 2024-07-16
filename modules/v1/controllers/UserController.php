@@ -2,9 +2,10 @@
 
 namespace v1\controllers;
 
-use v1\components\user\UserSearchService;
 use Yii;
 use app\models\User;
+use v1\components\user\UserSearchService;
+use yii\base\Module;
 use yii\filters\auth\HttpBearerAuth;
 use yii\web\Controller;
 use yii\web\HttpException;
@@ -22,6 +23,14 @@ use yii\web\Response;
  */
 class UserController extends Controller
 {
+    /**
+     * Constructor.
+     *
+     * @param string $id
+     * @param Module $module
+     * @param UserSearchService $userSearchService
+     * @param array<int|string, mixed> $config
+     */
     public function __construct($id, $module, private UserSearchService $userSearchService, $config = [])
     {
         parent::__construct($id, $module, $config);
@@ -150,7 +159,45 @@ class UserController extends Controller
         return $this->asJson($user);
     }
 
-    public function actionSearch(){
+    /**
+     * @OA\Post(
+     *      path="/v1/user/search",
+     *      summary="Search",
+     *      description="Search for users info",
+     *      tags={"User"},
+     *      @OA\RequestBody(
+     *          description="criteria to search",
+     *          required=true,
+     *          @OA\MediaType(
+     *              mediaType="application/json",
+     *              @OA\Schema(
+     *                  @OA\Property(property="username", type="string", description="username"),
+     *                  @OA\Property(property="email", type="string", description="email"),
+     *              )
+     *          )
+     *      ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="User info",
+     *          @OA\MediaType(
+     *              mediaType="application/json",
+     *              @OA\Schema(
+     *                  @OA\Property(property="id", type="int", description="id"),
+     *                  @OA\Property(property="uuid", type="string", description="uuid"),
+     *                  @OA\Property(property="username", type="string", description="username"),
+     *                  @OA\Property(property="email", type="string", description="email")
+     *                  @OA\Property(property="status", type="string", description="status")
+     *              )
+     *          )
+     *      )
+     * )
+     *
+     * Search for users info
+     *
+     * @return array<string, mixed> return the user data
+     */
+    public function actionSearch()
+    {
         $criteria = Yii::$app->request->bodyParams;
 
         return $this->userSearchService->searchUser($criteria);
