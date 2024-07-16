@@ -5,15 +5,27 @@ namespace app\components\user;
 use AtelliTech\Yii2\Utils\AbstractRepository;
 use app\models\User;
 use yii\db\ActiveQuery;
-use yii\db\ActiveRecord;
 
-class UserRepository extends AbstractRepository{
+/**
+ * Repository for accessing User model
+ */
+class UserRepository extends AbstractRepository
+{
+    /**
+     * @var string model class name
+     */
     protected string $modelClass = User::class;
 
-    public function search(array $criteria):ActiveQuery
+    /**
+     * Search for users with username and email
+     * 
+     * @param array $criteria
+     * @return ActiveQuery
+     */
+    public function search(array $criteria): ActiveQuery
     {
         $query = $this->find();
-        
+
         if (isset($criteria['username'])) {
             $query->andWhere(['like', 'username', $criteria['username']]);
         }
@@ -21,7 +33,7 @@ class UserRepository extends AbstractRepository{
         if (isset($criteria['email'])) {
             $query->andWhere(['like', 'email', $criteria['email']]);
         }
-        
+
         return $query;
     }
 }

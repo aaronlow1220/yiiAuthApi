@@ -11,15 +11,7 @@ class UserSearchService{
 
     public function searchUser(array $criteria): array
     {
-        $query = $this->userRepository->find();
-
-        if (isset($criteria['username'])) {
-            $query->andFilterWhere(['like', 'username', $criteria['username']]);
-        }
-
-        if (isset($criteria['email'])) {
-            $query->andFilterWhere(['like', 'email', $criteria['email']]);
-        }
+        $query = $this->userRepository->search($criteria);
 
         $dataProvider = new ActiveDataProvider([
             'query' => &$query,
