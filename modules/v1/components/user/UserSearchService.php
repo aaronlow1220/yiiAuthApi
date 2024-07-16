@@ -6,12 +6,9 @@ use app\components\user\UserRepository;
 use yii\data\ActiveDataProvider;
 
 class UserSearchService{
-    protected  $userRepository;
 
-    public function __construct(UserRepository $userRepository)
-    {
-        $this->userRepository = $userRepository;
-    }
+    public function __construct(private UserRepository $userRepository){}
+
     public function searchUser(array $criteria): ActiveDataProvider
     {
         $query = $this->userRepository->search($criteria);
