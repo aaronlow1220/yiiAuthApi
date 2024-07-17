@@ -185,7 +185,7 @@ class UserController extends Controller
      *                  @OA\Property(property="id", type="int", description="id"),
      *                  @OA\Property(property="uuid", type="string", description="uuid"),
      *                  @OA\Property(property="username", type="string", description="username"),
-     *                  @OA\Property(property="email", type="string", description="email")
+     *                  @OA\Property(property="email", type="string", description="email"),
      *                  @OA\Property(property="status", type="string", description="status")
      *              )
      *          )
